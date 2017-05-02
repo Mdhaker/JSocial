@@ -1,2 +1,2 @@
-# JTweets
-Simple Java SDK for Twitter Search API
+# JSocial
+Simple Java SDK for divers social networks..
