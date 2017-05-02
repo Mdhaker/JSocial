@@ -1,6 +1,8 @@
-package com.datacollection.twitter.TwitterSearchClient;
+package com.datacollection.interfaces;
 import java.util.Set;
 import org.json.JSONObject;
+
+import com.datacollection.config.SearchFilter;
 public interface Searcher 
 {
 	/**

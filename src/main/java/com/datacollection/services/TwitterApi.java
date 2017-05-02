@@ -1,4 +1,4 @@
-package com.datacollection.twitter.TwitterSearchClient;
+package com.datacollection.services;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -9,31 +9,57 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.datacollection.config.Auth;
+import com.datacollection.config.Config;
+import com.datacollection.config.SearchFilter;
+import com.datacollection.interfaces.Reader;
+import com.datacollection.interfaces.Searcher;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 
-public class TwitterApi implements Searcher{
+public class TwitterApi implements Searcher, Reader{
 
 	private OAuthRequest request;
-	private  TwitterApi()
+	
+	/**
+	 * Default Constructor
+	 */
+	private TwitterApi(){}
+	private  TwitterApi(Verb method,String endpoint)
 	{
-		this.request = new OAuthRequest(Verb.GET, Config.getSearch_ENDPOINT(), Auth.getInstance().getService());
 		
+		this.request = new OAuthRequest(method, endpoint, Auth.getTwitterInstance().getService());
 	}
-	public static TwitterApi init()
+	/**
+	 * build for each action, Searcher
+	 * @return
+	 */
+	public static Searcher buildSearcher()
 	{
-		return new TwitterApi();
+		return  new TwitterApi(Verb.GET,Config.getTwitterSearch_ENDPOINT());
+	}
+	/**
+	 * build for each action, Reader
+	 * @return
+	 */
+	public static Reader buildReader()
+	{
+		return  new TwitterApi();
 	}
 
+	/**
+	 * get Json list of tweets by query
+	 */
 	public Set<JSONObject> getTweets(String query) 
 	{
 		Set<JSONObject> tweets = new HashSet<JSONObject>();
 		this.request.addParameter("q", query);
-		Auth.getInstance().getService().signRequest(Auth.getInstance().getAppAccessToken(), request); 
+		Auth.getTwitterInstance().getService().signRequest(Auth.getTwitterInstance().getAppAccessToken(), request); 
 		Response response = request.send();
 		try 
 		{
+			System.out.println(response.getBody());
 			System.out.println("This is request compelte URL : " + this.request.getCompleteUrl());
 			System.out.println("Oauth Params : " + this.request.getOauthParameters());
 			System.out.println("Query string Params : " + this.request.getQueryStringParams().toString());
@@ -59,6 +85,9 @@ public class TwitterApi implements Searcher{
 			return null;			
 		}
 	}
+	/**
+	 * get Json list of tweets by filter
+	 */
 	public Set<JSONObject> getTweets(SearchFilter filter) 
 	{
 		String query=filter.getExactPhrase();
@@ -181,6 +210,44 @@ public class TwitterApi implements Searcher{
 	{
 		if(result_type.equals("recent")||result_type.equals("popular"))
 			this.request.addParameter("result_type",result_type);
+	}
+	public JSONObject getUser() 
+	{
+		this.request = new OAuthRequest(Verb.GET, Config.getTwitterUserInfo_ENDPOINT(), Auth.getTwitterInstance().getService());
+		Auth.getTwitterInstance().getService().signRequest(Auth.getTwitterInstance().getUserAccessToken(), request); 
+		Response response = request.send();
+		
+		JSONObject result=new JSONObject("{'Error':'insidecode'}");
+		try {
+			result = new JSONObject(response.getBody().toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public Set<JSONObject> getPlace(String query) 
+	{
+		Set<JSONObject> result = new HashSet<JSONObject>();
+		this.request = new OAuthRequest(Verb.GET, Config.getTwitterPlaceInfo_ENDPOINT(), Auth.getTwitterInstance().getService());
+		this.request.addParameter("query", query);
+		Auth.getTwitterInstance().getService().signRequest(Auth.getTwitterInstance().getAppAccessToken(), request); 
+		Response response = request.send();
+		
+		try {
+			JSONArray places = new JSONObject(response.getBody()).getJSONObject("result").getJSONArray("places");
+			
+			for(int i=0;i<places.length();i++)
+			{
+				result.add(places.getJSONObject(i));
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
 	

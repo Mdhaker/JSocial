@@ -1,4 +1,4 @@
-package com.datacollection.twitter.TwitterSearchClient;
+package com.datacollection.config;
 
 import java.util.Date;
 import java.util.HashSet;
