@@ -1,4 +1,4 @@
-package com.datacollection.twitter.TwitterSearchClient;
+package com.datacollection.test;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

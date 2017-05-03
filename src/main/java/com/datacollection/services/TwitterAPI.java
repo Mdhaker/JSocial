@@ -20,7 +20,7 @@ import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
-public class TwitterApi implements Searcher, Reader{
+public class TwitterAPI implements Searcher, Reader{
 
 	private OAuthRequest request;
 	private OAuth10aService service=(OAuth10aService) Auth.getTwitterInstance().getService();
@@ -28,8 +28,8 @@ public class TwitterApi implements Searcher, Reader{
 	/**
 	 * Default Constructor
 	 */
-	private TwitterApi(){}
-	private  TwitterApi(Verb method,String endpoint)
+	private TwitterAPI(){}
+	private  TwitterAPI(Verb method,String endpoint)
 	{
 		this.request = new OAuthRequest(method, endpoint, this.service);
 	}
@@ -39,7 +39,7 @@ public class TwitterApi implements Searcher, Reader{
 	 */
 	public static Searcher buildSearcher()
 	{
-		return  new TwitterApi(Verb.GET,Config.getTwitterSearch_ENDPOINT());
+		return  new TwitterAPI(Verb.GET,Config.getTwitterSearch_ENDPOINT());
 	}
 	/**
 	 * build for each action, Reader
@@ -47,7 +47,7 @@ public class TwitterApi implements Searcher, Reader{
 	 */
 	public static Reader buildReader()
 	{
-		return  new TwitterApi();
+		return  new TwitterAPI();
 	}
 
 	/**
