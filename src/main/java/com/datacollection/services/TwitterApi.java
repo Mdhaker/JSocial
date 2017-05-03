@@ -14,13 +14,16 @@ import com.datacollection.config.Config;
 import com.datacollection.config.SearchFilter;
 import com.datacollection.interfaces.Reader;
 import com.datacollection.interfaces.Searcher;
+import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
+import com.github.scribejava.core.oauth.OAuth10aService;
 
 public class TwitterApi implements Searcher, Reader{
 
 	private OAuthRequest request;
+	private OAuth10aService service=(OAuth10aService) Auth.getTwitterInstance().getService();
 	
 	/**
 	 * Default Constructor
@@ -28,8 +31,7 @@ public class TwitterApi implements Searcher, Reader{
 	private TwitterApi(){}
 	private  TwitterApi(Verb method,String endpoint)
 	{
-		
-		this.request = new OAuthRequest(method, endpoint, Auth.getTwitterInstance().getService());
+		this.request = new OAuthRequest(method, endpoint, this.service);
 	}
 	/**
 	 * build for each action, Searcher
@@ -55,7 +57,7 @@ public class TwitterApi implements Searcher, Reader{
 	{
 		Set<JSONObject> tweets = new HashSet<JSONObject>();
 		this.request.addParameter("q", query);
-		Auth.getTwitterInstance().getService().signRequest(Auth.getTwitterInstance().getAppAccessToken(), request); 
+		this.service.signRequest((OAuth1AccessToken) Auth.getTwitterInstance().getAppAccessToken(), request); 
 		Response response = request.send();
 		try 
 		{
@@ -213,8 +215,8 @@ public class TwitterApi implements Searcher, Reader{
 	}
 	public JSONObject getUser() 
 	{
-		this.request = new OAuthRequest(Verb.GET, Config.getTwitterUserInfo_ENDPOINT(), Auth.getTwitterInstance().getService());
-		Auth.getTwitterInstance().getService().signRequest(Auth.getTwitterInstance().getUserAccessToken(), request); 
+		this.request = new OAuthRequest(Verb.GET, Config.getTwitterUserInfo_ENDPOINT(), this.service);
+		this.service.signRequest((OAuth1AccessToken) Auth.getTwitterInstance().getUserAccessToken(), request); 
 		Response response = request.send();
 		
 		JSONObject result=new JSONObject("{'Error':'insidecode'}");
@@ -230,9 +232,9 @@ public class TwitterApi implements Searcher, Reader{
 	public Set<JSONObject> getPlace(String query) 
 	{
 		Set<JSONObject> result = new HashSet<JSONObject>();
-		this.request = new OAuthRequest(Verb.GET, Config.getTwitterPlaceInfo_ENDPOINT(), Auth.getTwitterInstance().getService());
+		this.request = new OAuthRequest(Verb.GET, Config.getTwitterPlaceInfo_ENDPOINT(), this.service);
 		this.request.addParameter("query", query);
-		Auth.getTwitterInstance().getService().signRequest(Auth.getTwitterInstance().getAppAccessToken(), request); 
+		this.service.signRequest((OAuth1AccessToken) Auth.getTwitterInstance().getAppAccessToken(), request); 
 		Response response = request.send();
 		
 		try {
