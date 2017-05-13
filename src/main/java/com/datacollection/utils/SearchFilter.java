@@ -1,4 +1,4 @@
-package com.datacollection.config;
+package com.datacollection.utils;
 
 import java.util.Date;
 import java.util.HashSet;

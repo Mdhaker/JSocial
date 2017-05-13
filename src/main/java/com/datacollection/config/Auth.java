@@ -7,7 +7,10 @@ import java.net.URISyntaxException;
 import java.util.Random;
 import java.util.Scanner;
 
+import com.datacollection.utils.AuthServer;
 import com.github.scribejava.apis.FacebookApi;
+import com.github.scribejava.apis.GoogleApi20;
+import com.github.scribejava.apis.LinkedInApi20;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1AccessToken;
@@ -32,6 +35,7 @@ public class Auth {
         instance = new Auth((OAuth10aService) new ServiceBuilder()
                 .apiKey(Config.TWITTER_CONSUMER_ID)
                 .apiSecret(Config.TWITTER_CONSUMER_SECRET)
+                .callback(Config.CALLBACK_URL)
                 .build(TwitterApi.instance()));
        instance.setCurrentNetwork("TWITTER");
         return instance;
@@ -44,11 +48,42 @@ public class Auth {
 	{
 		instance = new Auth((OAuth20Service) new ServiceBuilder()
                 .apiKey(Config.FACEBOOK_APP_ID)
-                .apiSecret(Config.FACEBOOK_SECRET_ID)
+                .apiSecret(Config.FACEBOOK_APP_SECRET)
                 .state("secret" + new Random().nextInt(999999))
-                .callback("http://murmuring-tundra-1599.herokuapp.com/oauth_callback/")
+                .callback(Config.CALLBACK_URL)
                 .build(FacebookApi.instance()));
 		instance.setCurrentNetwork("FACEBOOK");
+		return instance;
+	}
+	/**
+	 * OAuth provider for Linkedin
+	 */
+	public static Auth getLinkedinInstance()
+	{
+		instance = new Auth((OAuth20Service) new ServiceBuilder()
+				.apiKey(Config.LINKEDIN_APP_ID)
+				.apiSecret(Config.LINKEDIN_APP_SECRET)
+				.scope("r_basicprofile r_emailaddress") // replace with desired scope
+				.callback(Config.CALLBACK_URL)
+				.state("secret" + new Random().nextInt(999999))
+				.build(LinkedInApi20.instance()));
+		instance.setCurrentNetwork("LNIKEDIN");
+		return instance;
+	}
+	/**
+	 * OAuth provider for Google
+	 * @return
+	 */
+	public static Auth getGoogleInstance()
+	{
+		instance = new Auth((OAuth20Service) new ServiceBuilder()
+                .apiKey(Config.GOOGLE_APP_ID)
+                .apiSecret(Config.GOOGLE_APP_SECRET)
+                .scope("profile") // replace with desired scope
+                .callback(Config.CALLBACK_URL)
+                .state("secret" + new Random().nextInt(999999))
+                .build(GoogleApi20.instance()));
+		instance.setCurrentNetwork("G+");
 		return instance;
 	}
 	/**
@@ -70,7 +105,10 @@ public class Auth {
 		if(this.currentNetwork.equals("TWITTER"))
 			return new OAuth1AccessToken(Config.TWITTER_ACCESS_TOKEN,Config.TWITTER_ACCESS_TOKEN_SECRET);
 		else if(this.currentNetwork.equals("FACEBOOK"))
-			return new OAuth2AccessToken(Config.FACEBOOK_APP_ID+"|"+Config.FACEBOOK_SECRET_ID);
+			return new OAuth2AccessToken(Config.FACEBOOK_APP_ID+"|"+Config.FACEBOOK_APP_SECRET);
+		else if(this.currentNetwork.equals("G+"))
+			return new OAuth2AccessToken(Config.GOOGLE_API_KEY);
+		
 		else
 			return null;
 	}
@@ -81,27 +119,47 @@ public class Auth {
 	public Object getUserAccessToken()
 	{
 		String authUrl;
+		AuthServer server = AuthServer.start();
 		try 
 		{
+			
+			// Oauth 1 providers
 			if(this.currentNetwork.equals("TWITTER"))
 			{
 			OAuth1RequestToken requestToken = ((OAuth10aService) service).getRequestToken();
 			 authUrl= ((OAuth10aService) service).getAuthorizationUrl(requestToken);
-			 this.openBrowser(authUrl);
-			 System.out.println(">>");
-			 System.out.println(">>");
-			 System.out.print(">>");
-			 String oauthVerifier = keyboard.nextLine();
-			 return ((OAuth10aService) service).getAccessToken(requestToken, oauthVerifier);
+			 AuthServer.openBrowser(authUrl);
+			 
+			 int i=0;
+				while(server.getCode().equals(""))
+				 {
+					//waiting loop
+					if(i==0)
+					 System.out.println("waiting authentification ...");
+					i++;
+				 }	    
+			 
+			 
+			 String code = server.getCode();
+			 System.out.println("this is the code result"+code);
+			 return ((OAuth10aService) service).getAccessToken(requestToken, code);
 			}
-			else if(this.currentNetwork.equals("FACEBOOK"))
+			
+			// Oauth 2.0 providers
+			else if(this.currentNetwork.equals("FACEBOOK")||this.currentNetwork.equals("LNIKEDIN")||this.currentNetwork.equals("G+"))
 			{
 				authUrl = ((OAuth20Service)this.service).getAuthorizationUrl();
-				this.openBrowser(authUrl);
-				System.out.println("paste the authorization code here");
-		        System.out.print(">>");
-		        final String code = keyboard.nextLine();
-		        return ((OAuth20Service)service).getAccessToken(code);
+				AuthServer.openBrowser(authUrl);
+				// for console display
+				int i=0;
+				while(server.getCode().equals(""))
+				 {
+					//waiting loop
+					if(i==0)
+					 System.out.println("waiting authentification ...");
+					i++;
+				 }	        
+		        return ((OAuth20Service)service).getAccessToken(server.getCode());
 		        
 			}
 			else return null;
@@ -120,38 +178,12 @@ public class Auth {
 	{
 		if(this.currentNetwork.equals("TWITTER"))
 			return (OAuth10aService) this.service;
-		else if(this.currentNetwork.equals("FACEBOOK"))
+		else if(this.currentNetwork.equals("FACEBOOK")||this.currentNetwork.equals("LNIKEDIN")||this.currentNetwork.equals("G+"))
 			return (OAuth20Service) this.service;
+		
 		else return null;
 	}
-	/**
-	 * simple method to open browser with a target url (authorization) url, in manuel oauth test
-	 * @param url
-	 */
-	private void openBrowser(String url) 
-	{
-        if(Desktop.isDesktopSupported()){
-            Desktop desktop = Desktop.getDesktop();
-          
-                try {
-					desktop.browse(new URI(url));
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (URISyntaxException e) {
-					e.printStackTrace();
-				}
-           
-        }else{
-            Runtime runtime = Runtime.getRuntime();
-            try {
-                runtime.exec("xdg-open " + url);
-                Runtime.getRuntime().exec("cls");
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+	
 	// Getter & Setter 
 	public String getCurrentNetwork() {
 		return currentNetwork;

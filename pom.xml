@@ -15,6 +15,7 @@
   </properties>
 
   <dependencies>
+  
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -27,9 +28,14 @@
     	<version>3.2.0</version>
     </dependency>
    <dependency>
-    <groupId>org.json</groupId>
-    <artifactId>json</artifactId>
-    <version>20160810</version>
+	    <groupId>org.json</groupId>
+	    <artifactId>json</artifactId>
+	    <version>20160810</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.sun.net.httpserver</groupId>
+	    <artifactId>http</artifactId>
+	    <version>20070405</version>
 	</dependency>
   </dependencies>
 </project>

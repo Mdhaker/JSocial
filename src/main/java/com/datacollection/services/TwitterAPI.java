@@ -11,41 +11,32 @@ import org.json.JSONObject;
 
 import com.datacollection.config.Auth;
 import com.datacollection.config.Config;
-import com.datacollection.config.SearchFilter;
-import com.datacollection.interfaces.Reader;
-import com.datacollection.interfaces.Searcher;
+import com.datacollection.interfaces.Twitter;
+import com.datacollection.utils.SearchFilter;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth10aService;
 
-public class TwitterAPI implements Searcher, Reader{
+public class TwitterAPI implements Twitter{
 
 	private OAuthRequest request;
-	private OAuth10aService service=(OAuth10aService) Auth.getTwitterInstance().getService();
+	private OAuth10aService service;
 	
 	/**
 	 * Default Constructor
 	 */
-	private TwitterAPI(){}
-	private  TwitterAPI(Verb method,String endpoint)
+	private TwitterAPI()
 	{
-		this.request = new OAuthRequest(method, endpoint, this.service);
+		this.service = (OAuth10aService) Auth.getTwitterInstance().getService();
 	}
-	/**
-	 * build for each action, Searcher
-	 * @return
-	 */
-	public static Searcher buildSearcher()
-	{
-		return  new TwitterAPI(Verb.GET,Config.getTwitterSearch_ENDPOINT());
-	}
+	
 	/**
 	 * build for each action, Reader
 	 * @return
 	 */
-	public static Reader buildReader()
+	public static Twitter build()
 	{
 		return  new TwitterAPI();
 	}
@@ -55,6 +46,7 @@ public class TwitterAPI implements Searcher, Reader{
 	 */
 	public Set<JSONObject> getTweets(String query) 
 	{
+		this.request = new OAuthRequest(Verb.GET,Config.getTwitterSearch_ENDPOINT(), this.service);
 		Set<JSONObject> tweets = new HashSet<JSONObject>();
 		this.request.addParameter("q", query);
 		this.service.signRequest((OAuth1AccessToken) Auth.getTwitterInstance().getAppAccessToken(), request); 

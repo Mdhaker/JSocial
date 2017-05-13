@@ -2,8 +2,8 @@ package com.datacollection.interfaces;
 import java.util.Set;
 import org.json.JSONObject;
 
-import com.datacollection.config.SearchFilter;
-public interface Searcher 
+import com.datacollection.utils.SearchFilter;
+public interface Twitter extends Reader
 {
 	/**
 	 * get tweets by query string, handle twitter request query
@@ -20,11 +20,18 @@ public interface Searcher
 	
 	public Set<JSONObject> getTweets(SearchFilter filter);
 	/**
+	 * Search Place by query
+	 * @param query
+	 * @return
+	 */
+	public Set<JSONObject> getPlace(String query);
+	/**
 	 * setting Geo location params
 	 * @param longitude
 	 * @param latitude
 	 * @param radius in km
 	 */
+	
 	public void setGeo(float longitude, float latitude, float radius);
 	/**
 	 *  Setting language ISO 639-1
