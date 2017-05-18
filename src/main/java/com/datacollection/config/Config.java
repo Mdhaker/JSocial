@@ -40,11 +40,13 @@ public class Config
 	public static String GOOGLE_API_KEY ="AIzaSyB4B8WXf69W7IBHkHDNbLqByisTDJBmuDs";
 	public static String getGoogleUserInfo_ENDPOINT(){return "https://www.googleapis.com/plus/v1/people/me";}
 	public static String getGooglePublicUser_ENDPOINT(){return "https://www.googleapis.com/plus/v1/people";}
+	public static String getGooglePublicActivity_ENDPOINT(){return "https://www.googleapis.com/plus/v1/activities";}
+	public static String getGooglePublicComments_ENDPOINT(){return "https://www.googleapis.com/plus/v1/comments";}
 	
 	
 	//Flickler Cred
 	
-	public static String FILCKER_APP_ID="a8a3eca8e81064cfdac2baf7c445e569";
-	public static String FILCKER_APP_SECRET="c2abea55d4932e70";
+	public static String FILCKER_APP_ID="63025183effe6a604cf3079f10a06bd2";
+	public static String FILCKER_APP_SECRET="dee0e8d68955b338";
 	public static String FILCKER_BASE_URL = "https://api.flickr.com/services/rest/";
 }

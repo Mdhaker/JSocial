@@ -1,4 +1,4 @@
-package com.datacollection.config;
+package com.datacollection.utils;
 
 import java.awt.Desktop;
 import java.io.IOException;
@@ -7,8 +7,9 @@ import java.net.URISyntaxException;
 import java.util.Random;
 import java.util.Scanner;
 
-import com.datacollection.utils.AuthServer;
+import com.datacollection.config.Config;
 import com.github.scribejava.apis.FacebookApi;
+import com.github.scribejava.apis.FlickrApi;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.apis.LinkedInApi20;
 import com.github.scribejava.apis.TwitterApi;
@@ -40,6 +41,19 @@ public class Auth {
        instance.setCurrentNetwork("TWITTER");
         return instance;
     }
+	/**
+	 * OAuth provider for Flickr
+	 * @return
+	 */
+	public static Auth getFlickrInstance() {
+		 instance = new Auth((OAuth10aService) new ServiceBuilder()
+	                .apiKey(Config.FILCKER_APP_ID)
+	                .apiSecret(Config.FILCKER_APP_SECRET)
+	                .callback(Config.CALLBACK_URL)
+	                .build(FlickrApi.instance()));
+	       instance.setCurrentNetwork("FLICKR");
+	        return instance;
+	}
 	/**
 	 * OAuth provider for facebook
 	 * @return
@@ -124,7 +138,7 @@ public class Auth {
 		{
 			
 			// Oauth 1 providers
-			if(this.currentNetwork.equals("TWITTER"))
+			if(this.currentNetwork.equals("TWITTER")||this.currentNetwork.equals("FLICKR"))
 			{
 			OAuth1RequestToken requestToken = ((OAuth10aService) service).getRequestToken();
 			 authUrl= ((OAuth10aService) service).getAuthorizationUrl(requestToken);
@@ -176,7 +190,7 @@ public class Auth {
 	
 	public Object getService()
 	{
-		if(this.currentNetwork.equals("TWITTER"))
+		if(this.currentNetwork.equals("TWITTER")||this.currentNetwork.equals("FLICKR"))
 			return (OAuth10aService) this.service;
 		else if(this.currentNetwork.equals("FACEBOOK")||this.currentNetwork.equals("LNIKEDIN")||this.currentNetwork.equals("G+"))
 			return (OAuth20Service) this.service;
@@ -191,6 +205,7 @@ public class Auth {
 	public void setCurrentNetwork(String currentNetwork) {
 		this.currentNetwork = currentNetwork;
 	}
+	
 	
 }
 

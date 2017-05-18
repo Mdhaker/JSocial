@@ -6,9 +6,9 @@ import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.datacollection.config.Auth;
 import com.datacollection.config.Config;
 import com.datacollection.interfaces.Facebook;
+import com.datacollection.utils.Auth;
 import com.datacollection.utils.Parser;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
@@ -51,13 +51,13 @@ public class FacebookAPI implements Facebook {
 		return result;
 	}
 
-	public Set<JSONObject> getPlace(String query) {
+	public Set<JSONObject> getPlaces(String query) {
 		this.request = new OAuthRequest(Verb.GET, Config.getFacebookSearch_ENDPOINT(), this.service);
 		this.request.addParameter("q", query);
 		this.request.addParameter("type", "place");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request); 
 		Response response = request.send();
-		return Parser.facebookParser(response);
+		return Parser.parseTable(response,"data");
 	}
 	
 
@@ -66,7 +66,7 @@ public class FacebookAPI implements Facebook {
 		this.request.addParameter("q", query);
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request); 
 		Response response = request.send();
-		return Parser.facebookParser(response);
+		return Parser.parseTable(response,"data");
 	}
 
 	public Set<JSONObject> getPage(String query) {
@@ -75,7 +75,7 @@ public class FacebookAPI implements Facebook {
 		this.request.addParameter("type", "page");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request); 
 		Response response = request.send();
-		return Parser.facebookParser(response);
+		return Parser.parseTable(response,"data");
 	}
 
 	public Set<JSONObject> getUser(String query) {
@@ -84,7 +84,7 @@ public class FacebookAPI implements Facebook {
 		this.request.addParameter("type", "user");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request); 
 		Response response = request.send();
-		return Parser.facebookParser(response);
+		return Parser.parseTable(response,"data");
 		}
 
 	public Set<JSONObject> getFeed(String id) {		
@@ -104,7 +104,7 @@ public class FacebookAPI implements Facebook {
 		this.request = new OAuthRequest(Verb.GET, Config.getFacebook_BASEURL()+"/"+nodeID+"/"+edge, this.service);
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request);
 		Response response = request.send();
-		return Parser.facebookParser(response);
+		return Parser.parseTable(response,"data");
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class FacebookAPI implements Facebook {
 		this.request = new OAuthRequest(Verb.GET, Config.getFacebook_BASEURL()+"/"+nodeID+"/"+edge, this.service);
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request);
 		Response response = request.send();
-		return Parser.facebookParser(response);
+		return Parser.parseTable(response,"data");
 	}
 
 }

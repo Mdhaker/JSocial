@@ -9,9 +9,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.datacollection.config.Auth;
 import com.datacollection.config.Config;
 import com.datacollection.interfaces.Twitter;
+import com.datacollection.utils.Auth;
 import com.datacollection.utils.SearchFilter;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
@@ -82,7 +82,7 @@ public class TwitterAPI implements Twitter{
 	/**
 	 * get Json list of tweets by filter
 	 */
-	public Set<JSONObject> getTweets(SearchFilter filter) 
+	public Set<JSONObject> getTweets(SearchFilter.TwitterFilter filter) 
 	{
 		String query=filter.getExactPhrase();
 		// Query have one of those word operator "space"
@@ -221,7 +221,8 @@ public class TwitterAPI implements Twitter{
 		}
 		return result;
 	}
-	public Set<JSONObject> getPlace(String query) 
+	
+	public Set<JSONObject> getPlaces(String query) 
 	{
 		Set<JSONObject> result = new HashSet<JSONObject>();
 		this.request = new OAuthRequest(Verb.GET, Config.getTwitterPlaceInfo_ENDPOINT(), this.service);

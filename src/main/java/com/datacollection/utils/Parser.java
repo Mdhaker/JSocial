@@ -17,7 +17,7 @@ import com.github.scribejava.core.model.Response;
 
 public class Parser {
 
-	public static Set<JSONObject> facebookParser(Response response)
+	public static Set<JSONObject> parseTable(Response response,String root)
 	{
 		Set<JSONObject> result = new HashSet<JSONObject>();
 		System.out.println("Response before parsing .. "+response.getMessage());
@@ -26,7 +26,7 @@ public class Parser {
 		try {
 			resp=response.getBody();
 			System.out.println("Response before parsing : "+resp);
-			JSONArray elements = new JSONObject(resp).getJSONArray("data");
+			JSONArray elements = new JSONObject(resp).getJSONArray(root);
 			
 			for(int i=0;i<elements.length();i++)
 			{
@@ -43,30 +43,25 @@ public class Parser {
 		return result;
 		
 	}
-	public static Set<JSONObject> googleParser(Response response)
+	
+	public static JSONObject parseObject(Response response,String network,String root)
 	{
 		Set<JSONObject> result = new HashSet<JSONObject>();
-		
 		String resp="";
 		try {
 			resp=response.getBody();
-			JSONArray elements = new JSONObject(resp).getJSONArray("items");
-			
-			for(int i=0;i<elements.length();i++)
+			if(network.equalsIgnoreCase("flickr"))
 			{
-				result.add(elements.getJSONObject(i));
+				resp = resp.substring(14, resp.length()-1);				
 			}
-		} catch (JSONException e) {
+			System.out.println("Response before parsing : "+resp);
+		} catch (JSONException | IOException e) {
 			System.out.println(e.getMessage());
 			System.out.println(resp);
-			
-			
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return result;
-		
+		} 
+		return new JSONObject(resp).getJSONObject(root);
 	}
+	
 	public static void saveTofile(Set<JSONObject> json,String filename)
 	{
 		FileWriter filew;

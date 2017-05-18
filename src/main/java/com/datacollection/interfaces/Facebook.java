@@ -17,7 +17,7 @@ public interface Facebook extends Reader{
 	 * @param query
 	 * @return
 	 */
-	public Set<JSONObject> getPlace(String query);
+	public Set<JSONObject> getPlaces(String query);
 	/**
 	 * Search for page
 	 * @param query 

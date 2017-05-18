@@ -18,13 +18,13 @@ public interface Twitter extends Reader
 	 * @return list of json objects of tweets
 	 */
 	
-	public Set<JSONObject> getTweets(SearchFilter filter);
+	public Set<JSONObject> getTweets(SearchFilter.TwitterFilter filter);
 	/**
 	 * Search Place by query
 	 * @param query
 	 * @return
 	 */
-	public Set<JSONObject> getPlace(String query);
+	public Set<JSONObject> getPlaces(String query);
 	/**
 	 * setting Geo location params
 	 * @param longitude

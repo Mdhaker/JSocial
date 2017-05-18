@@ -4,9 +4,9 @@ import java.io.IOException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.datacollection.config.Auth;
 import com.datacollection.config.Config;
 import com.datacollection.interfaces.Linkedin;
+import com.datacollection.utils.Auth;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Response;
