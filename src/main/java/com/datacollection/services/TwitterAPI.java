@@ -1,17 +1,19 @@
 package com.datacollection.services;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.datacollection.config.Config;
 import com.datacollection.interfaces.Twitter;
 import com.datacollection.utils.Auth;
+import com.datacollection.utils.Pagination;
+import com.datacollection.utils.Parser;
 import com.datacollection.utils.SearchFilter;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
@@ -23,6 +25,7 @@ public class TwitterAPI implements Twitter{
 
 	private OAuthRequest request;
 	private OAuth10aService service;
+	private Map<String,String> params;
 	
 	/**
 	 * Default Constructor
@@ -30,6 +33,7 @@ public class TwitterAPI implements Twitter{
 	private TwitterAPI()
 	{
 		this.service = (OAuth10aService) Auth.getTwitterInstance().getService();
+		this.params = new HashMap<String,String>();
 	}
 	
 	/**
@@ -47,37 +51,16 @@ public class TwitterAPI implements Twitter{
 	public Set<JSONObject> getTweets(String query) 
 	{
 		this.request = new OAuthRequest(Verb.GET,Config.getTwitterSearch_ENDPOINT(), this.service);
-		Set<JSONObject> tweets = new HashSet<JSONObject>();
 		this.request.addParameter("q", query);
+		this.request.addParameter("count", "30");
+		for(Entry<String,String> entry : params.entrySet())
+		{
+			this.request.addParameter(entry.getKey(), entry.getValue());
+		}
 		this.service.signRequest((OAuth1AccessToken) Auth.getTwitterInstance().getAppAccessToken(), request); 
-		Response response = request.send();
-		try 
-		{
-			System.out.println(response.getBody());
-			System.out.println("This is request compelte URL : " + this.request.getCompleteUrl());
-			System.out.println("Oauth Params : " + this.request.getOauthParameters());
-			System.out.println("Query string Params : " + this.request.getQueryStringParams().toString());
-			System.out.println("This is request URL : " + this.request.getUrl());
-			JSONArray	jtweets = new JSONObject(response.getBody()).getJSONArray("statuses");
-			
-				for(int i=0;i<jtweets.length();i++)
-				{
-					tweets.add(jtweets.getJSONObject(i));
-				}
-			
-			return tweets;
-		} 
-		catch (JSONException e)
-		{
-			System.out.println(e.getMessage());
-			//return new JSONObject(this.response).getJSONArray("statuses");
-			return null;
-		}
-		catch (IOException e) 
-		{
-			System.out.println(e.getMessage());
-			return null;			
-		}
+		Pagination.buildPaginator(this.service).twitterPaginator(this.request);
+		return Pagination.gettwitterData();
+		
 	}
 	/**
 	 * get Json list of tweets by filter
@@ -107,7 +90,7 @@ public class TwitterAPI implements Twitter{
 		// Query have these hashtags
 		for(String hashtag:filter.getHashtags())
 		{
-			if(!(hashtag.charAt(0)=='#'))
+			if(!hashtag.isEmpty()&&!(hashtag.charAt(0)=='#'))
 				hashtag="#"+hashtag;
 			query = query.concat(" "+hashtag);
 		}
@@ -181,29 +164,34 @@ public class TwitterAPI implements Twitter{
 		return this.getTweets(query);
 	}
 	
-	public void setGeo(float longitude, float latitude, float radius) 
+	public TwitterAPI setGeo(float longitude, float latitude, float radius) 
 	{
 		this.request.addParameter("geocode", String.valueOf(longitude)+","
 				+String.valueOf(latitude)+","+String.valueOf(radius)+"km");		
+		return this;
 	}
 	
-	public void setLang(String lang)
+	public TwitterAPI setLang(String lang)
 	{
-		this.request.addParameter("lang",lang);
+		this.params.put("lang",lang);
+		return this;
 	}
-	public void setCount(int count) 
+	public TwitterAPI setCount(int count) 
 	{
-		this.request.addParameter("count",Integer.toString(count));		
+		this.params.put("count",Integer.toString(count));	
+		return this;
 	}
-	public void setEntity(boolean include) 
+	public TwitterAPI setEntity(boolean include) 
 	{
-		this.request.addParameter("include_entities",Boolean.toString(include));		
+		this.params.put("include_entities",Boolean.toString(include));
+		return this;
 	}
 	
-	public void setResultType(String result_type)
+	public TwitterAPI setResultType(String result_type)
 	{
 		if(result_type.equals("recent")||result_type.equals("popular"))
-			this.request.addParameter("result_type",result_type);
+			this.params.put("result_type",result_type);
+		return this;
 	}
 	public JSONObject getUser() 
 	{
@@ -224,25 +212,11 @@ public class TwitterAPI implements Twitter{
 	
 	public Set<JSONObject> getPlaces(String query) 
 	{
-		Set<JSONObject> result = new HashSet<JSONObject>();
 		this.request = new OAuthRequest(Verb.GET, Config.getTwitterPlaceInfo_ENDPOINT(), this.service);
 		this.request.addParameter("query", query);
 		this.service.signRequest((OAuth1AccessToken) Auth.getTwitterInstance().getAppAccessToken(), request); 
 		Response response = request.send();
-		
-		try {
-			JSONArray places = new JSONObject(response.getBody()).getJSONObject("result").getJSONArray("places");
-			
-			for(int i=0;i<places.length();i++)
-			{
-				result.add(places.getJSONObject(i));
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return result;
+		return Parser.parseArray(response, "result","places");
 	}
 	
 	

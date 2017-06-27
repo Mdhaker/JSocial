@@ -2,6 +2,7 @@ package com.datacollection.interfaces;
 import java.util.Set;
 import org.json.JSONObject;
 
+import com.datacollection.services.TwitterAPI;
 import com.datacollection.utils.SearchFilter;
 public interface Twitter extends Reader
 {
@@ -32,12 +33,12 @@ public interface Twitter extends Reader
 	 * @param radius in km
 	 */
 	
-	public void setGeo(float longitude, float latitude, float radius);
+	public TwitterAPI setGeo(float longitude, float latitude, float radius);
 	/**
 	 *  Setting language ISO 639-1
 	 * @param lang tow chars
 	 */
-	public void setLang(String lang);	
+	public TwitterAPI setLang(String lang);	
 	/**
 	 * Specifies what type of search results you would prefer to receive. The current default is “mixed.” Valid values include:
 
@@ -47,17 +48,17 @@ public interface Twitter extends Reader
 		
 		* popular : return only the most popular results in the response.
 	 */
-	public void setResultType(String result_type);
+	public TwitterAPI setResultType(String result_type);
 	/**
 	 * The number of tweets to return per page, up to a maximum of 100. Defaults to 15. This was formerly the “rpp” parameter in the old Search API.
 	 * @param count
 	 */
-	public void setCount(int count);
+	public TwitterAPI setCount(int count);
 	/**
 	 * The entities node will not be included when set to false.	
 	 * @param include yes or no 
 	 */
-	public void setEntity(boolean include);
+	public TwitterAPI setEntity(boolean include);
 	
 
 }

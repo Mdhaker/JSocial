@@ -67,7 +67,7 @@ public class FlickrAPI implements Flickr{
 	public JSONObject findUserByMail(String query) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
 		
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.findByEmail.name());
 		this.request.addParameter("find_email", query);
 		this.request.addParameter("format", "json");
@@ -81,7 +81,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject findUserByUserName(String username) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.findByUsername.name());
 		this.request.addParameter("username", username);
 		this.request.addParameter("format", "json");
@@ -93,7 +93,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getUserPhotos(String id) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.getPhotos.name());
 		this.request.addParameter("user_id", id);
 		this.request.addParameter("format", "json");
@@ -105,7 +105,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getUserInfo(String id) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.getInfo.name());
 		this.request.addParameter("user_id", id);
 		this.request.addParameter("format", "json");
@@ -117,7 +117,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getUserGroups(String id) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.getPublicGroups.name());
 		this.request.addParameter("user_id", id);
 		this.request.addParameter("format", "json");
@@ -129,7 +129,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject searchPhoto(String text) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.photos."+FlickrAPI.methodsPhoto.search.name());
 		this.request.addParameter("text", text);
 		this.request.addParameter("format", "json");
@@ -141,7 +141,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getPhotoInfo(String id) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.photos."+FlickrAPI.methodsPhoto.getInfo.name());
 		this.request.addParameter("photo_id", id);
 		this.request.addParameter("format", "json");
@@ -153,7 +153,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getPhotoComments(String id) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.photos.comments."+FlickrAPI.methodsPhotoComment.getList.name());
 		this.request.addParameter("photo_id", id);
 		this.request.addParameter("format", "json");
@@ -165,7 +165,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getPhotoGeoLocation(String id) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.photos.geo."+FlickrAPI.methodsPhotoGeo.getLocation.name());
 		this.request.addParameter("photo_id", id);
 		this.request.addParameter("format", "json");
@@ -177,7 +177,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getPlaces(String query) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.places."+FlickrAPI.methodsPlace.find.name());
 		this.request.addParameter("query", query);
 		this.request.addParameter("format", "json");
@@ -189,7 +189,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getPlaceInfo(String id) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.places."+FlickrAPI.methodsPlace.getInfo.name());
 		this.request.addParameter("place_id", id);
 		this.request.addParameter("format", "json");
@@ -201,7 +201,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getPlacesByLatLong(String lat, String lon,String acc) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.places."+FlickrAPI.methodsPlace.findByLatLon.name());
 		this.request.addParameter("lat", lat);
 		this.request.addParameter("lon", lon);
@@ -214,7 +214,7 @@ public class FlickrAPI implements Flickr{
 	@Override
 	public JSONObject getPlaceByURL(String url) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
-		this.request.addParameter("api_key", Config.FILCKER_APP_ID);
+		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.places."+FlickrAPI.methodsPlace.getInfoByUrl.name());
 		this.request.addParameter("url", url);
 		this.request.addParameter("format", "json");

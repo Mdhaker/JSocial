@@ -1,6 +1,9 @@
 package com.datacollection.services;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Set;
 
 import org.json.JSONException;
@@ -9,6 +12,7 @@ import org.json.JSONObject;
 import com.datacollection.config.Config;
 import com.datacollection.interfaces.Google;
 import com.datacollection.utils.Auth;
+import com.datacollection.utils.Pagination;
 import com.datacollection.utils.Parser;
 import com.datacollection.utils.SearchFilter.GoogleFilter;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -48,12 +52,13 @@ public class GoogleAPI implements Google{
 		return result;
 	}
 
-	public Set<JSONObject> getProfiles(String query) {
+	public Set<JSONObject> getProfiles(String query) 
+	{
 		this.request = new OAuthRequest(Verb.GET, Config.getGooglePublicUser_ENDPOINT(), this.service);
 		this.request.addParameter("query", query);
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
-		Response response = request.send();
-		return Parser.parseTable(response,"items");
+		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.getGooglePublicUser_ENDPOINT());
+		return Pagination.getgoogleData();
 	}
 	
 	@Override
@@ -61,12 +66,8 @@ public class GoogleAPI implements Google{
 		this.request = new OAuthRequest(Verb.GET, Config.getGooglePublicActivity_ENDPOINT(), this.service);
 		this.request.addParameter("query", query);
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
-		System.out.println(this.request.getUrl());
-		System.out.println(this.request.getSanitizedUrl());
-		Response response = request.send();
-		System.out.println(request.getCompleteUrl());
-		System.out.println(request.getOauthParameters());
-		return Parser.parseTable(response,"items");
+		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.getGooglePublicActivity_ENDPOINT());
+		return Pagination.getgoogleData();
 	}
 	@Override
 	public Set<JSONObject> getActivities(GoogleFilter filter) {
@@ -78,16 +79,16 @@ public class GoogleAPI implements Google{
 		if(filter.getOrderBy() != null)
 			this.request.addParameter("orderBy", filter.getOrderBy());
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
-		Response response = request.send();
-		return Parser.parseTable(response,"items");
+		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.getGooglePublicActivity_ENDPOINT());
+		return Pagination.getgoogleData();
 	}
 	@Override
 	public Set<JSONObject> getComments(String activityId) {
 		this.request = new OAuthRequest(Verb.GET, Config.getGooglePublicActivity_ENDPOINT()+"/"+activityId+"/comments", this.service);
 		
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
-		Response response = request.send();
-		return Parser.parseTable(response,"items");
+		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.getGooglePublicActivity_ENDPOINT()+"/"+activityId+"/comments");
+		return Pagination.getgoogleData();
 	}
 
 }

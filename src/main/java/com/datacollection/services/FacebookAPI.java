@@ -9,9 +9,11 @@ import org.json.JSONObject;
 import com.datacollection.config.Config;
 import com.datacollection.interfaces.Facebook;
 import com.datacollection.utils.Auth;
+import com.datacollection.utils.Pagination;
 import com.datacollection.utils.Parser;
 import com.github.scribejava.core.model.OAuth2AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
+import com.github.scribejava.core.model.Parameter;
 import com.github.scribejava.core.model.Response;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.oauth.OAuth20Service;
@@ -26,7 +28,7 @@ public class FacebookAPI implements Facebook {
 	}
 
 	/**
-	 * build for each action, Reader
+	 * Factory method
 	 * @return
 	 */
 	public static Facebook build()
@@ -51,42 +53,62 @@ public class FacebookAPI implements Facebook {
 		return result;
 	}
 
-	public Set<JSONObject> getPlaces(String query) {
+	public Set<JSONObject> searchPlaces(String query) {
 		this.request = new OAuthRequest(Verb.GET, Config.getFacebookSearch_ENDPOINT(), this.service);
 		this.request.addParameter("q", query);
 		this.request.addParameter("type", "place");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request); 
-		Response response = request.send();
-		return Parser.parseTable(response,"data");
+		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
+		return Pagination.getFacebookData();
 	}
 	
 
-	public Set<JSONObject> getTopics(String query) {
+	public Set<JSONObject> searchTopics(String query) {
 		this.request = new OAuthRequest(Verb.GET, Config.getFacebookSearchTopic_ENDPOINT(), this.service);
 		this.request.addParameter("q", query);
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request); 
-		Response response = request.send();
-		return Parser.parseTable(response,"data");
+		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
+		return Pagination.getFacebookData();
 	}
 
-	public Set<JSONObject> getPage(String query) {
+	public Set<JSONObject> searchPages(String query) {
 		this.request = new OAuthRequest(Verb.GET, Config.getFacebookSearch_ENDPOINT(), this.service);
 		this.request.addParameter("q", query);
 		this.request.addParameter("type", "page");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request); 
-		Response response = request.send();
-		return Parser.parseTable(response,"data");
+		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
+		return Pagination.getFacebookData();
+		
 	}
 
-	public Set<JSONObject> getUser(String query) {
+	public Set<JSONObject> searchUsers(String query) {
 		this.request = new OAuthRequest(Verb.GET, Config.getFacebookSearch_ENDPOINT(), this.service);
 		this.request.addParameter("q", query);
 		this.request.addParameter("type", "user");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request); 
-		Response response = request.send();
-		return Parser.parseTable(response,"data");
+		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
+		return Pagination.getFacebookData();
 		}
 
+	@Override
+	public Set<JSONObject> searchEvents(String query) {
+		this.request = new OAuthRequest(Verb.GET, Config.getFacebookSearch_ENDPOINT(), this.service);
+		this.request.addParameter("q", query);
+		this.request.addParameter("type", "event");
+		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request); 
+		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
+		return Pagination.getFacebookData();
+	}
+
+	@Override
+	public Set<JSONObject> searchGroups(String query) {
+		this.request = new OAuthRequest(Verb.GET, Config.getFacebookSearch_ENDPOINT(), this.service);
+		this.request.addParameter("q", query);
+		this.request.addParameter("type", "group");
+		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request); 
+		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
+		return Pagination.getFacebookData();
+	}
 	public Set<JSONObject> getFeed(String id) {		
 		
 		return this.getAppEdge(id, "feed");
@@ -100,19 +122,25 @@ public class FacebookAPI implements Facebook {
 	
 
 	@Override
-	public Set<JSONObject> getAppEdge(String nodeID, String edge) {
+	public Set<JSONObject> getAppEdge(String nodeID, String edge,Parameter... params) {
 		this.request = new OAuthRequest(Verb.GET, Config.getFacebook_BASEURL()+"/"+nodeID+"/"+edge, this.service);
+		for(Parameter param:params)
+			this.request.addParameter(param.getKey(), param.getValue());
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request);
-		Response response = request.send();
-		return Parser.parseTable(response,"data");
+		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
+		return Pagination.getFacebookData();
+	}
+	
+	@Override
+	public Set<JSONObject> getUserEdge(String nodeID, String edge,Parameter... params) {
+		this.request = new OAuthRequest(Verb.GET, Config.getFacebook_BASEURL()+"/"+nodeID+"/"+edge, this.service);
+		for(Parameter param:params)
+			this.request.addParameter(param.getKey(), param.getValue());
+		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request);
+		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
+		return Pagination.getFacebookData();
 	}
 
-	@Override
-	public Set<JSONObject> getUserEdge(String nodeID, String edge) {
-		this.request = new OAuthRequest(Verb.GET, Config.getFacebook_BASEURL()+"/"+nodeID+"/"+edge, this.service);
-		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request);
-		Response response = request.send();
-		return Parser.parseTable(response,"data");
-	}
+	
 
 }

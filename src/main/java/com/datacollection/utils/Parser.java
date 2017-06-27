@@ -1,8 +1,10 @@
 package com.datacollection.utils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -17,16 +19,27 @@ import com.github.scribejava.core.model.Response;
 
 public class Parser {
 
-	public static Set<JSONObject> parseTable(Response response,String root)
+	/**
+	 * Parse request reponse to JSON array
+	 * @param response respone to parse
+	 * @param root root block to excract the result
+	 * @return
+	 */
+	public static Set<JSONObject> parseArray(Response response,String... root)
 	{
 		Set<JSONObject> result = new HashSet<JSONObject>();
-		System.out.println("Response before parsing .. "+response.getMessage());
+		//System.out.println("Response before parsing .. "+response.getMessage());
 		
 		String resp="";
 		try {
 			resp=response.getBody();
-			System.out.println("Response before parsing : "+resp);
-			JSONArray elements = new JSONObject(resp).getJSONArray(root);
+			//System.out.println("Response before parsing : "+resp);
+			JSONObject rootObject= new JSONObject(resp);
+			JSONArray elements = null;
+			if(rootObject.get(root[0]) instanceof JSONArray)
+				elements = rootObject.getJSONArray(root[0]);
+			else
+				elements = rootObject.getJSONObject(root[0]).getJSONArray(root[1]);
 			
 			for(int i=0;i<elements.length();i++)
 			{
@@ -40,8 +53,8 @@ public class Parser {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return result;
 		
+		return result;
 	}
 	
 	public static JSONObject parseObject(Response response,String network,String root)
@@ -61,26 +74,78 @@ public class Parser {
 		} 
 		return new JSONObject(resp).getJSONObject(root);
 	}
+	public static String PathToSave="/home/dhaker/Desktop/";
+	
+	
 	
 	public static void saveTofile(Set<JSONObject> json,String filename)
 	{
 		FileWriter filew;
-		File file = new File("/home/dhaker/Desktop/"+filename+".json");
+		mkdir(PathToSave);
+		File file = new File(Parser.PathToSave+filename+".json");
 		
-		try {
+		try 
+		{
 			file.createNewFile();
 			System.out.println(file.getAbsolutePath());
 			filew = new FileWriter(file);
 			Iterator<JSONObject> it=json.iterator();
+			filew.append("{");
+			filew.append(System.lineSeparator());
+			filew.append("\"data\" : [");
+			filew.append(System.lineSeparator());
+			int i=1;
 			while(it.hasNext())
 			{
-				filew.append(it.next().toString(2));
+				filew.append(it.next().toString(10));				
+				if(i<json.size())
+					filew.append(",");
+				filew.append(System.lineSeparator());
+				i++;
 			}
+			filew.append("]");
+			filew.append(System.lineSeparator());
+			filew.append("}");
 			filew.close();
 			System.out.println("JSON Object appended to file");
-		} catch (IOException e) {
+		} 
+		catch (IOException e) 
+		{
 			e.printStackTrace();
-		}		
-		
+		}
+	}
+	
+	public static void mkdir(String path)
+	{
+		File theDir = new File(path);
+
+		// if the directory does not exist, create it
+		if (!theDir.exists()) {
+		    System.out.println("creating directory: " + theDir.getName());
+		    boolean result = false;
+		    try
+		    {
+		        theDir.mkdir();
+		        result = true;
+		    } 
+		    catch(SecurityException se)
+		    {
+		        //handle it
+		    }        
+		    if(result) 
+		    {    
+		        System.out.println("DIR created");  
+		    }
+		}
+		else
+		{
+			System.out.println("Directory exist");
+		}
+	}
+	
+	public static String formatQueryCols(String item)
+	{
+		String foramttedcol ="";
+		return foramttedcol;
 	}
 }

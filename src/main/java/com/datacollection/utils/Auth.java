@@ -8,10 +8,12 @@ import java.util.Random;
 import java.util.Scanner;
 
 import com.datacollection.config.Config;
+import com.datacollection.services.InstagramAPI;
 import com.github.scribejava.apis.FacebookApi;
 import com.github.scribejava.apis.FlickrApi;
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.apis.LinkedInApi20;
+import com.github.scribejava.apis.TumblrApi;
 import com.github.scribejava.apis.TwitterApi;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth1AccessToken;
@@ -47,8 +49,8 @@ public class Auth {
 	 */
 	public static Auth getFlickrInstance() {
 		 instance = new Auth((OAuth10aService) new ServiceBuilder()
-	                .apiKey(Config.FILCKER_APP_ID)
-	                .apiSecret(Config.FILCKER_APP_SECRET)
+	                .apiKey(Config.FILCKER_CONSUMER_ID)
+	                .apiSecret(Config.FILCKER_CONSUMER_SECRET)
 	                .callback(Config.CALLBACK_URL)
 	                .build(FlickrApi.instance()));
 	       instance.setCurrentNetwork("FLICKR");
@@ -91,15 +93,49 @@ public class Auth {
 	public static Auth getGoogleInstance()
 	{
 		instance = new Auth((OAuth20Service) new ServiceBuilder()
-                .apiKey(Config.GOOGLE_APP_ID)
-                .apiSecret(Config.GOOGLE_APP_SECRET)
-                .scope("profile") // replace with desired scope
-                .callback(Config.CALLBACK_URL)
-                .state("secret" + new Random().nextInt(999999))
-                .build(GoogleApi20.instance()));
+				.apiKey(Config.GOOGLE_APP_ID)
+				.apiSecret(Config.GOOGLE_APP_SECRET)
+				.scope("profile") // replace with desired scope
+				.callback(Config.CALLBACK_URL)
+				.state("secret" + new Random().nextInt(999999))
+				.build(GoogleApi20.instance()));
 		instance.setCurrentNetwork("G+");
 		return instance;
 	}
+	
+	/**
+	 * OAuth provider for Instagram
+	 * @return
+	 */
+	public static Auth getInstagramInstance()
+	{
+		instance = new Auth((OAuth20Service) new ServiceBuilder()
+				.apiKey(Config.INSTAGRAM_APP_ID)
+				.apiSecret(Config.INSTAGRAM_APP_SECRET)
+				.scope("public_content basic") // replace with desired scope
+				.callback(Config.CALLBACK_URL)
+				.state("secret" + new Random().nextInt(999999))
+				.build(InstagramApi20.instance()));
+		instance.setCurrentNetwork("Instagram");
+		return instance;
+	}
+	
+	/**
+	 * OAuth provider for Tumblr
+	 * @return
+	 */
+	public static Auth getTumblrInstance()
+	{
+		instance = new Auth((OAuth10aService) new ServiceBuilder()
+                .apiKey(Config.Tumblr_CONSUMER_ID)
+                .apiSecret(Config.Tumblr_CONSUMER_SECRET)
+                .callback(Config.CALLBACK_URL)
+                .build(TumblrApi.instance()));
+       instance.setCurrentNetwork("Tumblr");
+        return instance;
+	}
+	
+	
 	/**
 	 * constructor
 	 * @param service
@@ -122,6 +158,8 @@ public class Auth {
 			return new OAuth2AccessToken(Config.FACEBOOK_APP_ID+"|"+Config.FACEBOOK_APP_SECRET);
 		else if(this.currentNetwork.equals("G+"))
 			return new OAuth2AccessToken(Config.GOOGLE_API_KEY);
+		else if(this.currentNetwork.equals("Instagram"))
+			return new OAuth2AccessToken(Config.INSTAGRAM_APP_ID);
 		
 		else
 			return null;
@@ -136,9 +174,8 @@ public class Auth {
 		AuthServer server = AuthServer.start();
 		try 
 		{
-			
 			// Oauth 1 providers
-			if(this.currentNetwork.equals("TWITTER")||this.currentNetwork.equals("FLICKR"))
+			if(this.currentNetwork.equals("TWITTER")||this.currentNetwork.equals("FLICKR")||this.currentNetwork.equalsIgnoreCase("Tumblr"))
 			{
 			OAuth1RequestToken requestToken = ((OAuth10aService) service).getRequestToken();
 			 authUrl= ((OAuth10aService) service).getAuthorizationUrl(requestToken);
@@ -160,7 +197,7 @@ public class Auth {
 			}
 			
 			// Oauth 2.0 providers
-			else if(this.currentNetwork.equals("FACEBOOK")||this.currentNetwork.equals("LNIKEDIN")||this.currentNetwork.equals("G+"))
+			else if(this.currentNetwork.equalsIgnoreCase("FACEBOOK")||this.currentNetwork.equalsIgnoreCase("LNIKEDIN")||this.currentNetwork.equalsIgnoreCase("G+")||this.currentNetwork.equalsIgnoreCase("Instagram"))
 			{
 				authUrl = ((OAuth20Service)this.service).getAuthorizationUrl();
 				AuthServer.openBrowser(authUrl);
@@ -172,7 +209,8 @@ public class Auth {
 					if(i==0)
 					 System.out.println("waiting authentification ...");
 					i++;
-				 }	        
+				 }
+				System.out.println("this is my code : "+server.getCode());
 		        return ((OAuth20Service)service).getAccessToken(server.getCode());
 		        
 			}
@@ -190,9 +228,9 @@ public class Auth {
 	
 	public Object getService()
 	{
-		if(this.currentNetwork.equals("TWITTER")||this.currentNetwork.equals("FLICKR"))
+		if(this.currentNetwork.equalsIgnoreCase("TWITTER")||this.currentNetwork.equalsIgnoreCase("FLICKR")||this.currentNetwork.equalsIgnoreCase("Tumblr"))
 			return (OAuth10aService) this.service;
-		else if(this.currentNetwork.equals("FACEBOOK")||this.currentNetwork.equals("LNIKEDIN")||this.currentNetwork.equals("G+"))
+		else if(this.currentNetwork.equalsIgnoreCase("FACEBOOK")||this.currentNetwork.equalsIgnoreCase("LNIKEDIN")||this.currentNetwork.equalsIgnoreCase("G+")||this.currentNetwork.equalsIgnoreCase("Instagram"))
 			return (OAuth20Service) this.service;
 		
 		else return null;

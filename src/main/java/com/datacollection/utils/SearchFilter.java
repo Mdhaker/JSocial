@@ -48,6 +48,7 @@ public class SearchFilter {
 		 */
 		public TwitterFilter havingExactPhrase(String exact) 
 		{
+			if(!exact.isEmpty())
 			this.exactPhrase = exact;
 			return this;
 		}
@@ -85,8 +86,11 @@ public class SearchFilter {
 		 */
 		public TwitterFilter havingAllWords(String... allWords) 
 		{
+			if(allWords.length>0)
+			{
 			for(String word :allWords)
 				this.allWords.add(word);
+			}
 			return this;
 		}
 		/**
@@ -94,8 +98,11 @@ public class SearchFilter {
 		 */
 			public TwitterFilter havingNoneOf(String... noneWords) 
 			{
+				if(noneWords.length>0)
+				{
 				for(String word:noneWords)
 					this.noneWords.add(word);
+				}
 				return this;
 			}
 			/**
@@ -103,8 +110,11 @@ public class SearchFilter {
 			 */
 		public TwitterFilter havingHashtags(String... hashtags) 
 		{
+			if(hashtags.length>0)
+			{
 			for(String word:hashtags)
 				this.hashtags.add(word);
+			}
 		return this;
 		}
 			/**
@@ -112,8 +122,11 @@ public class SearchFilter {
 			 */
 		public TwitterFilter sentFrom(String... sentFrom) 
 		{
-			for(String account:sentFrom)
-			this.sentFrom.add(account);
+			if(sentFrom.length>0)
+			{
+			for(String word:sentFrom)
+				this.sentFrom.add(word);
+			}
 		return this;
 		}
 		/**
@@ -121,8 +134,11 @@ public class SearchFilter {
 		 */
 		public TwitterFilter sentTo(String... sentTo) 
 		{
-			for(String account:sentTo)
-				this.sentTo.add(account);
+			if(sentTo.length>0)
+			{
+			for(String word:sentTo)
+				this.sentTo.add(word);
+			}
 		return this;
 		}
 		
@@ -131,8 +147,11 @@ public class SearchFilter {
 		 */
 		public TwitterFilter havingAccounts(String... mentionAccounts) 
 		{
-			for(String account:mentionAccounts)
-				this.mentionAccount.add(account);
+			if(mentionAccounts.length>0)
+			{
+			for(String word:mentionAccounts)
+				this.mentionAccount.add(word);
+			}
 		return this;
 		}
 
@@ -141,8 +160,11 @@ public class SearchFilter {
 		 */
 		public TwitterFilter havingUrlWords(String... urlWords) 
 		{
-			for(String urlWord:urlWords)
-				this.urlWords.add(urlWord);
+			if(urlWords.length>0)
+			{
+			for(String word:urlWords)
+				this.urlWords.add(word);
+			}
 		return this;
 		}
 
@@ -208,7 +230,8 @@ public class SearchFilter {
 		 * Filter tweets having positive attitude
 		 */
 		
-		public TwitterFilter havingPositiveAttitude(boolean positiveAttitude) {
+		public TwitterFilter havingPositiveAttitude(boolean positiveAttitude)
+		{
 			this.positiveAttitude = positiveAttitude;
 		return this;}
 
@@ -334,7 +357,7 @@ public class SearchFilter {
 		
 	}
 	
-	/**
+	 /**
 	 * filter for google activities 
 	 * @author dhaker
 	 *

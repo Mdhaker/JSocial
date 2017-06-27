@@ -3,7 +3,7 @@ package com.datacollection.config;
 public class Config 
 {
 	public static String CALLBACK_URL="https://localhost:9000/";
-	public static String SSL_KEYSOTRE_FILE="/home/dhaker/key.jks";
+	public static String SSL_KEYSOTRE_FILE="/home/dhaker/certificate.jks";
 	public static String KEYSOTRE_PASSWORD="123456789";
 	public static String SSL_CA_File="/home/dhaker/Downloads/cacert.pem";
 	// Twitter Creds
@@ -46,7 +46,31 @@ public class Config
 	
 	//Flickler Cred
 	
-	public static String FILCKER_APP_ID="63025183effe6a604cf3079f10a06bd2";
-	public static String FILCKER_APP_SECRET="dee0e8d68955b338";
+	public static String FILCKER_CONSUMER_ID="63025183effe6a604cf3079f10a06bd2";
+	public static String FILCKER_CONSUMER_SECRET="dee0e8d68955b338";
 	public static String FILCKER_BASE_URL = "https://api.flickr.com/services/rest/";
+	
+	// Instagram Cred
+	public static String INSTAGRAM_APP_ID ="d854ac99b3134f9eb79ef8d268211587";
+	public static String INSTAGRAM_APP_SECRET ="f4c766a5fbf04ca5b300a75dc731dd2b";
+	public static String getInstagram_BASEURL(){return "https://graph.facebook.com";}
+	public static String getInstagramUserInfo_ENDPOINT(){return "https://api.instagram.com/v1/users/self/";}
+	public static String getInstagramUserSearch_ENDPOINT(){return "https://api.instagram.com/v1/users/search";}
+	public static String getInstagramSearchTopic_ENDPOINT(){return "https://graph.facebook.com/v2.9/search?type=topic";}
+	
+	// Youtube creds
+	public static String YOUTUBE_API_KEY ="AIzaSyB4B8WXf69W7IBHkHDNbLqByisTDJBmuDs";
+	public static String Youtube_Search_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/search";}
+	public static String Youtube_Playlist_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/playlists";}
+	public static String Youtube_Activities_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/activities";}
+	public static String Youtube_Channel_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/channels";}
+	public static String Youtube_Video_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/videos";}
+	
+	//Tumblr creds
+	public static String Tumblr_CONSUMER_ID ="hA6c5hJ2NG7nL1BSO0YgOXnUDU6lINe8wXAL7yA9ywCFoGE3YV";
+	public static String Tumblr_CONSUMER_SECRET ="3ZDxSvIaa4xW5EkI0Qz9qawtWGb7yBNuKUFXDROlN8llHSK1WG";
+	public static String Tumblr_tagged_ENDPOINT(){return "https://api.tumblr.com/v2/tagged";}
+	
+	
+	
 }

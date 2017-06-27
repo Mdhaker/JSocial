@@ -22,6 +22,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/dhaker/drill/apache-drill-1.10.0/jars/jdbc-driver/drill-jdbc-all-1.10.0.jar"/>
+	<classpathentry kind="lib" path="/home/dhaker/Desktop/Drill&amp;Zookeeper/drill/jars/jdbc-driver/drill-jdbc-all-1.10.0.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>
