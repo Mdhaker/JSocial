@@ -46,5 +46,30 @@ public class TumblrAPI implements Tumblr{
 		
 		return Parser.parseArray(response, "response");
 	}
+	@Override
+	public JSONObject getBlogInfo(String blog) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Set<JSONObject> getBlogLikes(String blog) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Set<JSONObject> getBlogFollowing(String blog) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Set<JSONObject> getBlogFollowers(String blog) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public Set<JSONObject> getBlogPosts(String blog) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

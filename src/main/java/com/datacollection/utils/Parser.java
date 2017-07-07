@@ -1,7 +1,9 @@
 package com.datacollection.utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -29,10 +31,13 @@ public class Parser {
 	{
 		Set<JSONObject> result = new HashSet<JSONObject>();
 		//System.out.println("Response before parsing .. "+response.getMessage());
-		
+		PrintStream showStream = System.out;
+		PrintStream hideStream    = new PrintStream(new HideStream());
 		String resp="";
 		try {
+			System.setOut(hideStream);
 			resp=response.getBody();
+			System.setOut(showStream);
 			//System.out.println("Response before parsing : "+resp);
 			JSONObject rootObject= new JSONObject(resp);
 			JSONArray elements = null;
@@ -77,11 +82,16 @@ public class Parser {
 	public static String PathToSave="/home/dhaker/Desktop/";
 	
 	
-	
+	/**
+	 * Save json object into json file with data array key root
+	 * @param json
+	 * @param filename
+	 */
 	public static void saveTofile(Set<JSONObject> json,String filename)
 	{
 		FileWriter filew;
 		mkdir(PathToSave);
+		System.out.println(Parser.PathToSave+filename+".json");
 		File file = new File(Parser.PathToSave+filename+".json");
 		
 		try 
@@ -103,9 +113,7 @@ public class Parser {
 				filew.append(System.lineSeparator());
 				i++;
 			}
-			filew.append("]");
-			filew.append(System.lineSeparator());
-			filew.append("}");
+			filew.append("]}");
 			filew.close();
 			System.out.println("JSON Object appended to file");
 		} 
@@ -115,17 +123,18 @@ public class Parser {
 		}
 	}
 	
+	
+	
 	public static void mkdir(String path)
 	{
 		File theDir = new File(path);
 
 		// if the directory does not exist, create it
 		if (!theDir.exists()) {
-		    System.out.println("creating directory: " + theDir.getName());
 		    boolean result = false;
 		    try
 		    {
-		        theDir.mkdir();
+		        theDir.mkdirs();
 		        result = true;
 		    } 
 		    catch(SecurityException se)
@@ -134,12 +143,11 @@ public class Parser {
 		    }        
 		    if(result) 
 		    {    
-		        System.out.println("DIR created");  
+		        System.out.println("Creating directory...");  
 		    }
 		}
 		else
 		{
-			System.out.println("Directory exist");
 		}
 	}
 	

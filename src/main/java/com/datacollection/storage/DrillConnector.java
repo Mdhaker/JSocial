@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import oadd.org.apache.commons.lang3.StringUtils;
+
 
 public class DrillConnector {
 	static final String JDBC_DRIVER = "org.apache.drill.jdbc.Driver";
@@ -50,7 +52,7 @@ public class DrillConnector {
     	if(new File(filepath).exists())
     		this.filepath = filepath;
     	else
-    		System.out.println("File don't exist");
+    		System.out.println("File don't exist : "+filepath);
     	
     	return this ;
     }
@@ -84,7 +86,7 @@ public class DrillConnector {
 						else
 							alias= items[i];
 						// unaccepted keys
-						String[] forbiddenkeys = {"from","user"};
+						String[] forbiddenkeys = {"from","user","language","time"};
 						if(Arrays.asList(forbiddenkeys).contains(alias))
 							alias ="item";
 					}
@@ -96,7 +98,11 @@ public class DrillConnector {
 						for(String item:targetCols.split("\\."))
 						{
 							target.trim();
-							target = target+"['"+item+"']";						
+									
+							if(StringUtils.isNumeric(item))
+								target = target+"["+item+"]";
+							else
+								target = target+"['"+item+"']";	
 						}
 					}
 					else
@@ -119,7 +125,10 @@ public class DrillConnector {
 			
 			if(where)
 			{
-				query = query+ "WHERE "+items[0] ;
+				if(flatten)
+					query = query+ " WHERE rootdoc.flatten."+items[0] ;
+				else
+					query = query+ " WHERE rootdoc."+items[0] ;
 			}
 			
 				

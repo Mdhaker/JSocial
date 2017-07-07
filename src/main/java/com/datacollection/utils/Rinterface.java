@@ -10,12 +10,22 @@ import java.util.Set;
 
 import org.json.JSONObject;
 
+import com.datacollection.config.Config;
 import com.datacollection.services.Provider;
 import com.datacollection.storage.DrillConnector;
 import com.github.scribejava.core.model.Parameter;
-
+/**
+ * This class is made to connect with R package using r-javas
+ * @author dhaker
+ *
+ */
 public class Rinterface {
 	
+	public void setDebug(boolean mode)
+	{
+		Config.Debug = mode ;
+	}
+	//Get topics from google+ and Twitter
 	public void getTopics(String path,String query)
 	{
 		Parser.PathToSave =path;
@@ -56,7 +66,110 @@ public class Rinterface {
 		Parser.saveTofile(Provider.GOOGLE.getActivities(filter), "googleActivities");
 		return path+"googleActivities.json";
 	}
+	// search a youtube element
+	public String searchYoutube(String path,String type,String query)
+	{
+		Parser.PathToSave =path;
+		if(type.equalsIgnoreCase("channel"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.findChannel(query), "channels");
+			return path+"channels.json";
+		}
+		else if(type.equalsIgnoreCase("video"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.findVideos(query), "videos");
+			return path+"videos.json";
+		}
+		else if(type.equalsIgnoreCase("playlist"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.findPlaylist(query), "playlists");
+			return path+"playlists.json";
+		}
+		
+		else
+		{
+		Parser.saveTofile(Provider.YOUTUBE.searchYoutube(query), "searchResult");
+		return path+"searchResult.json";
+		}
+	}
 	
+	// Get youtube elements info
+	public String getYoutube(String path,String type,String ID)
+	{
+		Parser.PathToSave =path+"/"+ID+"/";
+		if(type.equalsIgnoreCase("channel"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.getChannel(ID), "channel");
+			return Parser.PathToSave+"channel"+".json";
+		}
+		else if(type.equalsIgnoreCase("video"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.getVideo(ID), "videos");
+			return Parser.PathToSave+"videos"+".json";
+		}
+		else if(type.equalsIgnoreCase("playlist"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.getPlaylist(ID), "playlists");
+			return Parser.PathToSave+"playlists"+".json";
+		}
+		else if (type.equalsIgnoreCase("activity"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.getChannelActivities(ID), "channelActivities");
+			return Parser.PathToSave+"channelActivities"+".json";
+		}
+		else if (type.equalsIgnoreCase("subscription"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.getSubscriptions(ID), "subscriptions");
+			return Parser.PathToSave+"subscriptions"+".json";
+		}
+		else if (type.equalsIgnoreCase("caption"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.getcaptionTrack(ID), "captionsTrack");
+			return Parser.PathToSave+"captionsTrack"+".json";
+		}
+		else if (type.equalsIgnoreCase("section"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.getChannelSection(ID), "channelSections");
+			return Parser.PathToSave+"channelSections"+".json";
+		}
+		else if (type.equalsIgnoreCase("comment"))
+		{
+			Parser.saveTofile(Provider.YOUTUBE.getcommentThread(ID), "commentThread");
+			return Parser.PathToSave+"commentThread"+".json";
+		}
+		return "";
+	}
+	
+	// get channel and video from a list of IDs
+	public static String getYouTubeList(String path,String type,String... IDs)
+	{
+		Parser.PathToSave =path+"/"+type+"/";
+		if(type.equalsIgnoreCase("channel"))
+		{
+			Set<JSONObject> channels = new HashSet<JSONObject>() ;
+			for(int i=0;i<IDs.length;i++)
+			{
+				System.out.print("*");
+				channels.addAll(Provider.YOUTUBE.getChannel(IDs[i]));
+			}
+			Parser.saveTofile(channels, "ListOf#channels");
+			return Parser.PathToSave+"ListOf#channels"+".json";
+		}
+		
+		else if(type.equalsIgnoreCase("video"))
+		{
+			Set<JSONObject> videos = new HashSet<JSONObject>() ;
+			for(int i=0;i<IDs.length;i++)
+			{
+				videos.addAll(Provider.YOUTUBE.getVideo(IDs[i]));
+			}
+			Parser.saveTofile(videos, "ListOf#videos");
+			return Parser.PathToSave+"ListOf#videos"+".json";
+		}		
+		
+		return "";
+	}
+		
 	//params key and value in same string splitted by space
 	public String getFacebookEdge(String path,String nodeid,String edge,boolean user,String... params)
 	{

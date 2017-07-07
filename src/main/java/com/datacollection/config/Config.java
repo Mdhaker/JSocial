@@ -1,5 +1,9 @@
 package com.datacollection.config;
 
+import java.io.PrintStream;
+
+import com.datacollection.utils.HideStream;
+
 public class Config 
 {
 	public static String CALLBACK_URL="https://localhost:9000/";
@@ -42,7 +46,9 @@ public class Config
 	public static String getGooglePublicUser_ENDPOINT(){return "https://www.googleapis.com/plus/v1/people";}
 	public static String getGooglePublicActivity_ENDPOINT(){return "https://www.googleapis.com/plus/v1/activities";}
 	public static String getGooglePublicComments_ENDPOINT(){return "https://www.googleapis.com/plus/v1/comments";}
-	
+	public static PrintStream showStream = System.out;
+	public static PrintStream hideStream    = new PrintStream(new HideStream());
+	public static boolean Debug = false ;
 	
 	//Flickler Cred
 	
@@ -65,11 +71,21 @@ public class Config
 	public static String Youtube_Activities_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/activities";}
 	public static String Youtube_Channel_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/channels";}
 	public static String Youtube_Video_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/videos";}
+	public static String Youtube_rating_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/getRating";}
+	public static String Youtube_channelSection_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/channelSections";}
+	public static String Youtube_captionTrack_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/captions";}
+	public static String Youtube_comments_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/commentThreads";}
+	public static String Youtube_subscriptions_ENDPOINT(){return "https://www.googleapis.com/youtube/v3/subscriptions";}
 	
 	//Tumblr creds
 	public static String Tumblr_CONSUMER_ID ="hA6c5hJ2NG7nL1BSO0YgOXnUDU6lINe8wXAL7yA9ywCFoGE3YV";
 	public static String Tumblr_CONSUMER_SECRET ="3ZDxSvIaa4xW5EkI0Qz9qawtWGb7yBNuKUFXDROlN8llHSK1WG";
 	public static String Tumblr_tagged_ENDPOINT(){return "https://api.tumblr.com/v2/tagged";}
+	public static String Tumblr_blog_likes_ENDPOINT(String blog){return "https://api.tumblr.com/v2/blog/"+blog+"/likes";}
+	public static String Tumblr_blog_info_ENDPOINT(String blog){return "https://api.tumblr.com/v2/blog/"+blog+"/info";}
+	public static String Tumblr_blog_following_ENDPOINT(String blog){return "https://api.tumblr.com/v2/blog/"+blog+"/following";}
+	public static String Tumblr_blog_followers_ENDPOINT(String blog){return "https://api.tumblr.com/v2/blog/"+blog+"/followers";}
+	public static String Tumblr_blog_posts_ENDPOINT(String blog){return "https://api.tumblr.com/v2/blog/"+blog+"/posts";}
 	
 	
 	

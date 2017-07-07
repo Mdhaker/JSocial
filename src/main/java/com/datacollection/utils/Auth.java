@@ -79,7 +79,7 @@ public class Auth {
 		instance = new Auth((OAuth20Service) new ServiceBuilder()
 				.apiKey(Config.LINKEDIN_APP_ID)
 				.apiSecret(Config.LINKEDIN_APP_SECRET)
-				.scope("r_basicprofile r_emailaddress") // replace with desired scope
+				.scope("r_basicprofile r_emailaddress ") // replace with desired scope
 				.callback(Config.CALLBACK_URL)
 				.state("secret" + new Random().nextInt(999999))
 				.build(LinkedInApi20.instance()));
@@ -95,11 +95,11 @@ public class Auth {
 		instance = new Auth((OAuth20Service) new ServiceBuilder()
 				.apiKey(Config.GOOGLE_APP_ID)
 				.apiSecret(Config.GOOGLE_APP_SECRET)
-				.scope("profile") // replace with desired scope
+				.scope("profile https://www.googleapis.com/auth/youtube") // replace with desired scope
 				.callback(Config.CALLBACK_URL)
 				.state("secret" + new Random().nextInt(999999))
 				.build(GoogleApi20.instance()));
-		instance.setCurrentNetwork("G+");
+		instance.setCurrentNetwork("Google");
 		return instance;
 	}
 	
@@ -156,7 +156,7 @@ public class Auth {
 			return new OAuth1AccessToken(Config.TWITTER_ACCESS_TOKEN,Config.TWITTER_ACCESS_TOKEN_SECRET);
 		else if(this.currentNetwork.equals("FACEBOOK"))
 			return new OAuth2AccessToken(Config.FACEBOOK_APP_ID+"|"+Config.FACEBOOK_APP_SECRET);
-		else if(this.currentNetwork.equals("G+"))
+		else if(this.currentNetwork.equals("Google"))
 			return new OAuth2AccessToken(Config.GOOGLE_API_KEY);
 		else if(this.currentNetwork.equals("Instagram"))
 			return new OAuth2AccessToken(Config.INSTAGRAM_APP_ID);
@@ -197,7 +197,7 @@ public class Auth {
 			}
 			
 			// Oauth 2.0 providers
-			else if(this.currentNetwork.equalsIgnoreCase("FACEBOOK")||this.currentNetwork.equalsIgnoreCase("LNIKEDIN")||this.currentNetwork.equalsIgnoreCase("G+")||this.currentNetwork.equalsIgnoreCase("Instagram"))
+			else if(this.currentNetwork.equalsIgnoreCase("FACEBOOK")||this.currentNetwork.equalsIgnoreCase("Google"))
 			{
 				authUrl = ((OAuth20Service)this.service).getAuthorizationUrl();
 				AuthServer.openBrowser(authUrl);
@@ -210,8 +210,9 @@ public class Auth {
 					 System.out.println("waiting authentification ...");
 					i++;
 				 }
-				System.out.println("this is my code : "+server.getCode());
-		        return ((OAuth20Service)service).getAccessToken(server.getCode());
+				OAuth2AccessToken accessToken =((OAuth20Service) service).getAccessToken(server.getCode());
+				System.out.println("this is the access Token : "+accessToken.getAccessToken());
+		        return accessToken;
 		        
 			}
 			else return null;
@@ -230,7 +231,7 @@ public class Auth {
 	{
 		if(this.currentNetwork.equalsIgnoreCase("TWITTER")||this.currentNetwork.equalsIgnoreCase("FLICKR")||this.currentNetwork.equalsIgnoreCase("Tumblr"))
 			return (OAuth10aService) this.service;
-		else if(this.currentNetwork.equalsIgnoreCase("FACEBOOK")||this.currentNetwork.equalsIgnoreCase("LNIKEDIN")||this.currentNetwork.equalsIgnoreCase("G+")||this.currentNetwork.equalsIgnoreCase("Instagram"))
+		else if(this.currentNetwork.equalsIgnoreCase("FACEBOOK")||this.currentNetwork.equalsIgnoreCase("LNIKEDIN")||this.currentNetwork.equalsIgnoreCase("Google")||this.currentNetwork.equalsIgnoreCase("Instagram"))
 			return (OAuth20Service) this.service;
 		
 		else return null;

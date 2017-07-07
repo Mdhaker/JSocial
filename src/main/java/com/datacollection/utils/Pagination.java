@@ -1,12 +1,15 @@
 package com.datacollection.utils;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.HashSet;
 import java.util.Set;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.omg.CORBA.portable.OutputStream;
 
 import com.datacollection.config.Config;
+import com.github.scribejava.core.exceptions.OAuthConnectionException;
 import com.github.scribejava.core.model.OAuth1AccessToken;
 import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Parameter;
@@ -46,10 +49,11 @@ public class Pagination {
 	 */
 	public void facebookPaginator(OAuthRequest request)
 	{
-		Response response = request.send();
+		facebookData = new HashSet<JSONObject>();	
 		String resp="";
 		try 
 		{
+			Response response = request.send();
 			resp=response.getBody();
 			JSONObject jsonresult = new JSONObject(resp);
 			facebookData.addAll(Parser.parseArray(response,"data"));
@@ -70,6 +74,10 @@ public class Pagination {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
+		catch(OAuthConnectionException e)
+		{
+			System.err.println("Check your internet connection...");
+		}
 	}
 	/**
 	 * paginate twitter
@@ -77,6 +85,7 @@ public class Pagination {
 	 */
 	public void twitterPaginator(OAuthRequest request)
 	{
+		twitterData = new HashSet<JSONObject>();	
 		Response response = request.send();
 		String resp="";
 		try 
@@ -101,29 +110,36 @@ public class Pagination {
 			e.printStackTrace();
 		}		
 	}
-	
+	private int i=1;
 	public void googlePaginator(OAuthRequest request,String endpoint)
 	{
+		googleData = new HashSet<JSONObject>();	
+		PrintStream showStream = System.out;
+		PrintStream hideStream    = new PrintStream(new HideStream());
+		
+		
 		Response response = request.send();
 		String resp="";
 		try 
 		{
+			System.setOut(hideStream);
 			resp=response.getBody();
-			System.out.println(resp);
+			System.setOut(showStream);
 			JSONObject jsonresult = new JSONObject(resp);
 			googleData.addAll(Parser.parseArray(response,"items"));
+			System.out.println(googleData.size());
 			if(jsonresult.has("nextPageToken"))
 			{
-				System.out.println("Calling next page :"+this.pagecount);
 				OAuthRequest req = new OAuthRequest(Verb.GET,endpoint,this.service);
 				req.addParameter("pageToken", jsonresult.getString("nextPageToken"));
 				for(Parameter param :request.getQueryStringParams().getParams())
 				{
 					req.addParameter(param.getKey(), param.getValue());
-				}
-				System.out.println("Next page url : " +req.getCompleteUrl());
+				}				
+				System.out.println("calling page : " +i);
+				i++;
 				this.pagecount++;
-				twitterPaginator(req);
+				googlePaginator(req,endpoint);
 			}
 		} 
 		catch (JSONException e) {
@@ -131,7 +147,10 @@ public class Pagination {
 			System.out.println(resp);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}		
+		}	
+		
+		
+
 	}
 
 }

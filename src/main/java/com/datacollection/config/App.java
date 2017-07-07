@@ -1,5 +1,6 @@
 package com.datacollection.config;
 
+import java.io.File;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -18,13 +19,13 @@ public class App
 { 
     public static void main( String[] args )
     {    
-    	//Parser.saveTofile(Provider.FACEBOOK.getPage("mahatma ghandi"), "ghandi");
-    	//System.out.println(DrillConnector.getConnection().setFilePath("/home/dhaker/Desktop/GhandiOffcialPage/Facebookposts.json").selectItem("comments"));
-    	//Rinterface r = new Rinterface();
-    	//r.getFacebookEdge("FatherofNation","posts","/home/dhaker/Desktop/GhandiOffcialPage");
-    	//r.getTweets("/home/dhaker/Desktop/TwitterData/","","","","","","Khlifa soltani", "", true, true);
-    	//r.selectFrom("/home/dhaker/Desktop/Ghandi//FatherOfNationfeed.json", "from", "", "", false, true);
-    	//Provider.YOUTUBE.findChannel("gandhi");
-    	System.out.println(Provider.FACEBOOK.searchEvents("Psychology"));
+    	String path="/home/dhaker/Desktop/ThisDirectoryForTest/";
+    	Rinterface r = new Rinterface();
+    	r.getActivities(path+"pizza/", "Pizza","en");
+    	r.getActivities(path+"caf/", "CAF match","en");
+    	r.getActivities(path+"adis ababa/", "Adis ababa","en");
+    	r.getActivities(path+"land berg/", "Land berg","en");
+    	r.getActivities(path+"aireplance/", "Aireplanes","en");    	
+    	
     }
 }
