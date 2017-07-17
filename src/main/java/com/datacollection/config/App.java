@@ -21,11 +21,13 @@ public class App
     {    
     	String path="/home/dhaker/Desktop/ThisDirectoryForTest/";
     	Rinterface r = new Rinterface();
-    	r.getActivities(path+"pizza/", "Pizza","en");
-    	r.getActivities(path+"caf/", "CAF match","en");
-    	r.getActivities(path+"adis ababa/", "Adis ababa","en");
-    	r.getActivities(path+"land berg/", "Land berg","en");
-    	r.getActivities(path+"aireplance/", "Aireplanes","en");    	
+    	r.setDebug(false);
+    	r.searchYoutube(path+"RM/","channel", "Real Madrid");
+    	r.searchYoutube(path+"Ubisoft/","channel", "Ubisoft");
+    	r.searchYoutube(path+"Ksibet el madiouni/","channel", "Ksibet el madiouni");
+    	//r.getTweets("ghandi/", "Real Madrid");
+    	//r.getTweets(path+"Ubisoft/", "Ubisoft");
+    	//r.getTweets(path+"Ksibet el madiouni/", "Ksibet el madiouni");
     	
     }
 }

@@ -7,11 +7,13 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import org.slf4j.LoggerFactory;
+
+import com.datacollection.config.Config;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 
 import oadd.org.apache.commons.lang3.StringUtils;
 
@@ -27,9 +29,7 @@ public class DrillConnector {
     public DrillConnector() throws ClassNotFoundException, SQLException
     {
         Class.forName(JDBC_DRIVER);
-        this.connection =DriverManager.getConnection(DB_URL,USER,PASS);
-        
-
+        this.connection =DriverManager.getConnection(DB_URL,USER,PASS);       
     }
     public static DrillConnector getConnection()
     {
@@ -37,6 +37,7 @@ public class DrillConnector {
     	{
     		try {
 				instance = new DrillConnector();
+				Config.showDebug(); System.out.println("Connecting to drillbit Driver...");Config.hideDebug();
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error while loading drill Driver");
 				System.out.println(e.getMessage());
@@ -58,6 +59,7 @@ public class DrillConnector {
     }
     public List<String> selectItem(boolean flatten,boolean where,String... items)
     {
+    	
     	List<String> selectResult = new ArrayList<String>();
     	Statement stmt;
     	String query ="";
@@ -148,6 +150,7 @@ public class DrillConnector {
 		{
 			System.out.println(e.getMessage());
 		}
+		
         /* Perform a select on data in the classpath storage plugin. */ 
     	return selectResult;
     }

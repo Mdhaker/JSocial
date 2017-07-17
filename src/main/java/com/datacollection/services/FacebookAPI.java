@@ -58,6 +58,7 @@ public class FacebookAPI implements Facebook {
 		this.request.addParameter("q", query);
 		this.request.addParameter("type", "place");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request); 
+		Pagination.initPaginator("facebook");
 		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
 		return Pagination.getFacebookData();
 	}
@@ -67,6 +68,7 @@ public class FacebookAPI implements Facebook {
 		this.request = new OAuthRequest(Verb.GET, Config.getFacebookSearchTopic_ENDPOINT(), this.service);
 		this.request.addParameter("q", query);
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request); 
+		Pagination.initPaginator("facebook");
 		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
 		return Pagination.getFacebookData();
 	}
@@ -76,6 +78,7 @@ public class FacebookAPI implements Facebook {
 		this.request.addParameter("q", query);
 		this.request.addParameter("type", "page");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request); 
+		Pagination.initPaginator("facebook");
 		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
 		return Pagination.getFacebookData();
 		
@@ -86,6 +89,7 @@ public class FacebookAPI implements Facebook {
 		this.request.addParameter("q", query);
 		this.request.addParameter("type", "user");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request); 
+		Pagination.initPaginator("facebook");
 		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
 		return Pagination.getFacebookData();
 		}
@@ -96,6 +100,7 @@ public class FacebookAPI implements Facebook {
 		this.request.addParameter("q", query);
 		this.request.addParameter("type", "event");
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request); 
+		Pagination.initPaginator("facebook");
 		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
 		return Pagination.getFacebookData();
 	}
@@ -127,6 +132,7 @@ public class FacebookAPI implements Facebook {
 		for(Parameter param:params)
 			this.request.addParameter(param.getKey(), param.getValue());
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getAppAccessToken(), request);
+		Pagination.initPaginator("facebook");
 		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
 		return Pagination.getFacebookData();
 	}
@@ -137,6 +143,7 @@ public class FacebookAPI implements Facebook {
 		for(Parameter param:params)
 			this.request.addParameter(param.getKey(), param.getValue());
 		this.service.signRequest((OAuth2AccessToken) Auth.getFacebookInstance().getUserAccessToken(), request);
+		Pagination.initPaginator("facebook");
 		Pagination.buildPaginator(this.service).facebookPaginator(this.request);
 		return Pagination.getFacebookData();
 	}

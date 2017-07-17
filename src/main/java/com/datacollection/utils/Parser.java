@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.datacollection.config.Config;
 import com.github.scribejava.core.model.Response;
 
 
@@ -51,9 +52,6 @@ public class Parser {
 				result.add(elements.getJSONObject(i));
 			}
 		} catch (JSONException e) {
-			System.out.println(e.getMessage());
-			System.out.println(resp);
-			
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -89,6 +87,10 @@ public class Parser {
 	 */
 	public static void saveTofile(Set<JSONObject> json,String filename)
 	{
+		if(!Config.Debug)
+		{
+			Config.hideDebug();
+		}
 		FileWriter filew;
 		mkdir(PathToSave);
 		System.out.println(Parser.PathToSave+filename+".json");
@@ -116,6 +118,7 @@ public class Parser {
 			filew.append("]}");
 			filew.close();
 			System.out.println("JSON Object appended to file");
+			Config.hideDebug();
 		} 
 		catch (IOException e) 
 		{

@@ -46,9 +46,19 @@ public class Config
 	public static String getGooglePublicUser_ENDPOINT(){return "https://www.googleapis.com/plus/v1/people";}
 	public static String getGooglePublicActivity_ENDPOINT(){return "https://www.googleapis.com/plus/v1/activities";}
 	public static String getGooglePublicComments_ENDPOINT(){return "https://www.googleapis.com/plus/v1/comments";}
-	public static PrintStream showStream = System.out;
-	public static PrintStream hideStream    = new PrintStream(new HideStream());
+	private static PrintStream showStream = System.out;
+	private static PrintStream hideStream    = new PrintStream(new HideStream());
 	public static boolean Debug = false ;
+	public static void showDebug()
+	{
+			System.setOut(showStream);			
+	}
+	public static void hideDebug()
+	{
+		System.setOut(hideStream);
+	}
+	
+	
 	
 	//Flickler Cred
 	

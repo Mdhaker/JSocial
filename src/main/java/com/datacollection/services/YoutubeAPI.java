@@ -35,6 +35,7 @@ public class YoutubeAPI implements Youtube{
 		this.request.addParameter("part", "snippet");
 		this.request.addParameter("type", "video");
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
+		Pagination.initPaginator("google");
 		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.Youtube_Search_ENDPOINT());
 		return Pagination.getgoogleData();
 	}
@@ -45,6 +46,7 @@ public class YoutubeAPI implements Youtube{
 		this.request.addParameter("part", "snippet");
 		this.request.addParameter("type", "channel");
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
+		Pagination.initPaginator("google");
 		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.Youtube_Search_ENDPOINT());
 		return Pagination.getgoogleData();
 	}
@@ -56,6 +58,7 @@ public class YoutubeAPI implements Youtube{
 		this.request.addParameter("part", "snippet,statistics");
 		this.request.addParameter("type", "playlist");
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
+		Pagination.initPaginator("google");
 		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.Youtube_Search_ENDPOINT());
 		return Pagination.getgoogleData();
 	}
@@ -65,6 +68,7 @@ public class YoutubeAPI implements Youtube{
 		this.request.addParameter("channelId", channelID);
 		this.request.addParameter("part", "snippet");
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
+		Pagination.initPaginator("google");
 		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.Youtube_Activities_ENDPOINT());
 		return Pagination.getgoogleData();
 	}
@@ -142,6 +146,7 @@ public class YoutubeAPI implements Youtube{
 		this.request.addParameter("channelId", channelID);
 		this.request.addParameter("part", "snippet");
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
+		Pagination.initPaginator("google");
 		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.Youtube_subscriptions_ENDPOINT());
 		return Pagination.getgoogleData();
 	}

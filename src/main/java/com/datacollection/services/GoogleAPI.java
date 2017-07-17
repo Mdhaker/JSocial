@@ -57,6 +57,7 @@ public class GoogleAPI implements Google{
 		this.request = new OAuthRequest(Verb.GET, Config.getGooglePublicUser_ENDPOINT(), this.service);
 		this.request.addParameter("query", query);
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
+		Pagination.initPaginator("google");
 		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.getGooglePublicUser_ENDPOINT());
 		return Pagination.getgoogleData();
 	}
@@ -66,6 +67,7 @@ public class GoogleAPI implements Google{
 		this.request = new OAuthRequest(Verb.GET, Config.getGooglePublicActivity_ENDPOINT(), this.service);
 		this.request.addParameter("query", query);
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
+		Pagination.initPaginator("google");
 		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.getGooglePublicActivity_ENDPOINT());
 		return Pagination.getgoogleData();
 	}
@@ -79,6 +81,7 @@ public class GoogleAPI implements Google{
 		if(filter.getOrderBy() != null)
 			this.request.addParameter("orderBy", filter.getOrderBy());
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
+		Pagination.initPaginator("google");
 		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.getGooglePublicActivity_ENDPOINT());
 		return Pagination.getgoogleData();
 	}
@@ -87,6 +90,7 @@ public class GoogleAPI implements Google{
 		this.request = new OAuthRequest(Verb.GET, Config.getGooglePublicActivity_ENDPOINT()+"/"+activityId+"/comments", this.service);
 		
 		this.request.addParameter("key", Config.GOOGLE_API_KEY);
+		Pagination.initPaginator("google");
 		Pagination.buildPaginator(this.service).googlePaginator(this.request,Config.getGooglePublicActivity_ENDPOINT()+"/"+activityId+"/comments");
 		return Pagination.getgoogleData();
 	}

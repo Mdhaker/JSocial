@@ -58,6 +58,7 @@ public class TwitterAPI implements Twitter{
 			this.request.addParameter(entry.getKey(), entry.getValue());
 		}
 		this.service.signRequest((OAuth1AccessToken) Auth.getTwitterInstance().getAppAccessToken(), request); 
+		Pagination.initPaginator("twitter");
 		Pagination.buildPaginator(this.service).twitterPaginator(this.request);
 		return Pagination.gettwitterData();
 		

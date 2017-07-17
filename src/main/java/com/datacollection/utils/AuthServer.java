@@ -124,6 +124,10 @@ public class AuthServer implements HttpHandler {
 	 */
 	public static void openBrowser(String url) 
 	{
+		if (!Config.Debug)
+		{
+			Config.hideDebug();
+		}
         if(Desktop.isDesktopSupported()){
             Desktop desktop = Desktop.getDesktop();
           
@@ -144,6 +148,7 @@ public class AuthServer implements HttpHandler {
                 e.printStackTrace();
             }
         }
+        Config.hideDebug();
     }
 
 	@Override
