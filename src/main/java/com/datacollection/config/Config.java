@@ -97,6 +97,14 @@ public class Config
 	public static String Tumblr_blog_followers_ENDPOINT(String blog){return "https://api.tumblr.com/v2/blog/"+blog+"/followers";}
 	public static String Tumblr_blog_posts_ENDPOINT(String blog){return "https://api.tumblr.com/v2/blog/"+blog+"/posts";}
 	
+	public static boolean isWindows()
+	{
+		return (System.getProperty("os.name").equalsIgnoreCase("Windows"));
+	}
 	
+	public static boolean isLinux()
+	{
+		return (System.getProperty("os.name").equalsIgnoreCase("linux"));
+	}
 	
 }
