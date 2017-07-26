@@ -3,10 +3,13 @@ package com.datacollection.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -91,7 +94,7 @@ public class Parser {
 		{
 			Config.hideDebug();
 		}
-		FileWriter filew;
+		
 		mkdir(PathToSave);
 		System.out.println(Parser.PathToSave+filename+".json");
 		File file = new File(Parser.PathToSave+filename+".json");
@@ -100,6 +103,7 @@ public class Parser {
 		{
 			file.createNewFile();
 			System.out.println(file.getAbsolutePath());
+			OutputStreamWriter filew = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
 			filew = new FileWriter(file);
 			Iterator<JSONObject> it=json.iterator();
 			filew.append("{");
