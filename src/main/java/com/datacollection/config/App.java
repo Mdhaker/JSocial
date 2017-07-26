@@ -22,12 +22,7 @@ public class App
     	String path="/home/dhaker/Desktop/ThisDirectoryForTest/";
     	Rinterface r = new Rinterface();
     	r.setDebug(false);
-    	r.searchYoutube(path+"RM/","channel", "Real Madrid");
-    	r.searchYoutube(path+"Ubisoft/","channel", "Ubisoft");
-    	r.searchYoutube(path+"Ksibet el madiouni/","channel", "Ksibet el madiouni");
-    	//r.getTweets("ghandi/", "Real Madrid");
-    	//r.getTweets(path+"Ubisoft/", "Ubisoft");
-    	//r.getTweets(path+"Ksibet el madiouni/", "Ksibet el madiouni");
+    	System.out.println(r.getYouTubeList(path, "channel", "UCaWd5_7JhbQBe4dknZhsHJg","UCNW9X1rGnY271sMHZ0kVfeg","UC1KbedtKa3d5dleFR6OjQMg"));
     	
     }
 }

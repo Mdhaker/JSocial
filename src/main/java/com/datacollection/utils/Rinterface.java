@@ -303,7 +303,6 @@ public class Rinterface {
 	
 	public String[] selectFrom(String path,String item,String where, String savedfile,boolean append,boolean flatten)
 	{
-		System.out.print("/\\");
 		if(!Config.Debug)
 		{
 			Config.hideDebug();

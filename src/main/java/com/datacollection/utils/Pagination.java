@@ -93,12 +93,12 @@ public class Pagination {
 				float percent = ((((float)pagecount/80))*100);
 				if(pagecount % 2 == 0)
 				{
-					System.out.print("/");
+					//System.out.print("/");
 				}
 				else
-					System.out.print("\\");
+					//System.out.print("\\");
 				if(pagecount % 10 == 0&& (percent <100))
-					System.out.println("["+(int)percent+"%] ");
+					System.out.print("["+(int)percent+"%] ");
 								
 				
 				Config.hideDebug();

@@ -37,7 +37,7 @@ public class DrillConnector {
     	{
     		try {
 				instance = new DrillConnector();
-				Config.showDebug(); System.out.println("Connecting to drillbit Driver...");Config.hideDebug();
+				Config.showDebug(); System.out.println("Filtering data . . .");Config.hideDebug();
 			} catch (ClassNotFoundException e) {
 				System.out.println("Error while loading drill Driver");
 				System.out.println(e.getMessage());
