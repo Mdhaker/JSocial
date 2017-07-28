@@ -20,10 +20,8 @@ public class App
     public static void main( String[] args )
     {    
     	String path="/home/dhaker/Desktop/ThisDirectoryForTest/";
-    	Rinterface r = new Rinterface();
-    	Config.SSL_KEYSOTRE_FILE = "cert/"+Config.SSL_KEYSOTRE_FILE;
+    	Rinterface r = new Rinterface("/home/dhaker/datacollector/inst");
     	r.setDebug(false);
-    	//System.out.println(r.getYouTubeList(path, "channel", "UCaWd5_7JhbQBe4dknZhsHJg","UCNW9X1rGnY271sMHZ0kVfeg","UC1KbedtKa3d5dleFR6OjQMg"));
-    	r.searchFacebookEdge(path, "event", "tunisia");
+    	r.count(path+"channels.json", "*", true, "data");
     }
 }

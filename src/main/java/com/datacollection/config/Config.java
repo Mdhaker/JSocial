@@ -6,7 +6,7 @@ import com.datacollection.utils.HideStream;
 public class Config 
 {
 	public static String CALLBACK_URL="https://localhost:9000/";
-	public static String SSL_KEYSOTRE_FILE="certificate.jks";
+	public static String SSL_KEYSOTRE_FILE="/cert/certificate.jks";
 	public static String KEYSOTRE_PASSWORD="123456789";
 	public static String SSL_CA_File="/home/dhaker/Downloads/cacert.pem";
 	// Twitter Creds

@@ -25,6 +25,10 @@ public class Rinterface {
 	{
 		Config.Debug = mode ;
 	}
+	public Rinterface(String path)
+	{
+		Config.SSL_KEYSOTRE_FILE = path+Config.SSL_KEYSOTRE_FILE;
+	}
 	//Get topics from google+ and Twitter
 	public void getTopics(String path,String query)
 	{
