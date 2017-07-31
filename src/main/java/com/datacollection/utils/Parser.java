@@ -104,7 +104,6 @@ public class Parser {
 			file.createNewFile();
 			System.out.println(file.getAbsolutePath());
 			OutputStreamWriter filew = new OutputStreamWriter(new FileOutputStream(file), StandardCharsets.UTF_8);
-			filew = new FileWriter(file);
 			Iterator<JSONObject> it=json.iterator();
 			filew.append("{");
 			filew.append(System.lineSeparator());
