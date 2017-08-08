@@ -49,7 +49,7 @@ public interface Flickr {
 	 * @param id user id
 	 * @return
 	 */
-	public JSONObject searchPhoto(String text);
+	public Set<JSONObject> searchPhoto(String text);
 	/**
 	 * 
 	 * get photo info

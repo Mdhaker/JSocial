@@ -83,6 +83,36 @@ public class Rinterface {
 		System.out.println("Tweets collected.");
 		return path+"twitterTweets.json";
 	}
+	// Get tumblr posts
+	public String getTumblrPosts(String path,String query)
+	{
+		System.out.println("Searching posts from Tumblr . . .");
+		if(!Config.Debug)
+		{
+			Config.hideDebug();
+		}
+		Parser.PathToSave =path;
+		Parser.saveTofile(Provider.TUMBLR.findPosts(query),"tumblrPosts");
+		Config.showDebug();
+		System.out.println("posts collected.");
+		return path+"tumblrPosts.json";
+	}
+	// Get Flicker photo
+	
+	public String getFlickrPhotos(String path,String query)
+	{
+		System.out.println("Searching photos from Flickr . . .");
+		if(!Config.Debug)
+		{
+			Config.hideDebug();
+		}
+		Parser.PathToSave =path;
+		Parser.saveTofile(Provider.FLICKR.searchPhoto(query),"flickrPhotos");
+		Config.showDebug();
+		System.out.println("photos collected.");
+		return path+"flickrPhotos.json";
+	}
+	
 	//get google + activities
 	public String getActivities(String path,String query,String lang)
 	{
@@ -207,7 +237,7 @@ public class Rinterface {
 	}
 	
 	// get channel and video from a list of IDs
-	public static String getYouTubeList(String path,String type,String... IDs)
+	public  String getYouTubeList(String path,String type,String... IDs)
 	{
 		if(!Config.Debug)
 		{
@@ -239,7 +269,25 @@ public class Rinterface {
 		Config.showDebug();
 		return "";
 	}
-		
+	// get photo info from a list of flickr photos IDs
+		public String getFlickrList(String path,String... IDs)
+		{
+			if(!Config.Debug)
+			{
+				Config.hideDebug();
+			}
+						
+				Set<JSONObject> photos = new HashSet<JSONObject>() ;
+				for(int i=0;i<IDs.length;i++)
+				{
+					photos.add(Provider.FLICKR.getPhotoInfo(IDs[i]));
+				}
+				Parser.saveTofile(photos, "ListOf#photos");
+				
+					
+			Config.showDebug();
+			return Parser.PathToSave+"ListOf#photos"+".json";
+		}
 	//params key and value in same string splitted by space
 	public String getFacebookEdge(String path,String nodeid,String edge,boolean user,String... params)
 	{

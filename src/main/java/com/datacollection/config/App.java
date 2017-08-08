@@ -21,7 +21,9 @@ public class App
     {    
     	String path="/home/dhaker/Desktop/ThisDirectoryForTest/";
     	Rinterface r = new Rinterface("/home/dhaker/datacollector/inst");
-    	r.setDebug(false);
-    	r.count(path+"channels.json", "*", true, "data");
+    	r.setDebug(true);
+    	//r.count(path+"channels.json", "*", true, "data");
+    	r.getFlickrList(path, "35113313023","36157851831","36067599181","35809496990","36036769822");
+    	
     }
 }

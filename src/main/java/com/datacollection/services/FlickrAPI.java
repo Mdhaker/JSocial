@@ -71,6 +71,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.findByEmail.name());
 		this.request.addParameter("find_email", query);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","user");
@@ -85,6 +86,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.findByUsername.name());
 		this.request.addParameter("username", username);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","user");
@@ -97,6 +99,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.getPhotos.name());
 		this.request.addParameter("user_id", id);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","photos");
@@ -109,6 +112,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.getInfo.name());
 		this.request.addParameter("user_id", id);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","person");
@@ -121,21 +125,23 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.people."+FlickrAPI.methodsPeople.getPublicGroups.name());
 		this.request.addParameter("user_id", id);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","groups");
 	}
 	
 	@Override
-	public JSONObject searchPhoto(String text) {
+	public Set<JSONObject> searchPhoto(String text) {
 		this.request = new OAuthRequest(Verb.GET, Config.FILCKER_BASE_URL, this.service);
 		this.request.addParameter("api_key", Config.FILCKER_CONSUMER_ID);
 		this.request.addParameter("method", "flickr.photos."+FlickrAPI.methodsPhoto.search.name());
 		this.request.addParameter("text", text);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
-		return Parser.parseObject(response,"flickr","photos");
+		return Parser.parseArray(response,"photos","photo");
 	}
 
 	@Override
@@ -145,6 +151,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.photos."+FlickrAPI.methodsPhoto.getInfo.name());
 		this.request.addParameter("photo_id", id);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","photo");
@@ -157,6 +164,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.photos.comments."+FlickrAPI.methodsPhotoComment.getList.name());
 		this.request.addParameter("photo_id", id);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","comments");
@@ -169,6 +177,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.photos.geo."+FlickrAPI.methodsPhotoGeo.getLocation.name());
 		this.request.addParameter("photo_id", id);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","photo");
@@ -181,6 +190,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.places."+FlickrAPI.methodsPlace.find.name());
 		this.request.addParameter("query", query);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","places");
@@ -193,6 +203,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.places."+FlickrAPI.methodsPlace.getInfo.name());
 		this.request.addParameter("place_id", id);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","place");
@@ -207,6 +218,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("lon", lon);
 		this.request.addParameter("accurcy", acc);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","places");
@@ -218,6 +230,7 @@ public class FlickrAPI implements Flickr{
 		this.request.addParameter("method", "flickr.places."+FlickrAPI.methodsPlace.getInfoByUrl.name());
 		this.request.addParameter("url", url);
 		this.request.addParameter("format", "json");
+		this.request.addParameter("nojsoncallback", "1");
 		Response response = request.send();
 		System.out.println(request.getCompleteUrl());
 		return Parser.parseObject(response,"flickr","places");

@@ -42,22 +42,28 @@ public class Parser {
 			System.setOut(hideStream);
 			resp=response.getBody();
 			System.setOut(showStream);
-			//System.out.println("Response before parsing : "+resp);
+			System.out.println("Response before parsing : "+resp);
 			JSONObject rootObject= new JSONObject(resp);
+			//System.out.println(rootObject.toString());
 			JSONArray elements = null;
 			if(rootObject.get(root[0]) instanceof JSONArray)
+			{
 				elements = rootObject.getJSONArray(root[0]);
+			}
 			else
-				elements = rootObject.getJSONObject(root[0]).getJSONArray(root[1]);
+			{
+				elements = rootObject.getJSONObject(root[0]).getJSONArray(root[1]);		
+			}
 			
 			for(int i=0;i<elements.length();i++)
 			{
 				result.add(elements.getJSONObject(i));
 			}
-		} catch (JSONException e) {
-			
+		} catch (JSONException e) 
+		{
+			System.out.println(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		
 		return result;
@@ -69,10 +75,6 @@ public class Parser {
 		String resp="";
 		try {
 			resp=response.getBody();
-			if(network.equalsIgnoreCase("flickr"))
-			{
-				resp = resp.substring(14, resp.length()-1);				
-			}
 			System.out.println("Response before parsing : "+resp);
 		} catch (JSONException | IOException e) {
 			System.out.println(e.getMessage());
